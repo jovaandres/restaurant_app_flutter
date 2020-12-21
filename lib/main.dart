@@ -87,6 +87,7 @@ Widget _buildRestaurantItem(BuildContext context, Restaurants restaurant) {
           arguments: restaurant);
     },
     child: Container(
+      padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(
@@ -95,15 +96,21 @@ Widget _buildRestaurantItem(BuildContext context, Restaurants restaurant) {
               color: Colors.cyan.withOpacity(0.22),
             )
           ],
-          color: Colors.grey.withAlpha(100),
-          borderRadius: BorderRadius.all(Radius.circular(8.0))),
+          gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Color.fromRGBO(72, 85, 99, 1),
+                Color.fromRGBO(41, 50, 60, 1)
+              ]),
+          color: Colors.grey.withOpacity(1),
+          borderRadius: BorderRadius.all(Radius.circular(0))),
       margin: const EdgeInsets.all(4.0),
-      child: Wrap(
-        // crossAxisAlignment: CrossAxisAlignment.start,
-        direction: Axis.horizontal,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8),
+          Expanded(
+            flex: 2,
             child: ClipRRect(
                 borderRadius: BorderRadius.circular(8.0),
                 child: Hero(
@@ -114,39 +121,42 @@ Widget _buildRestaurantItem(BuildContext context, Restaurants restaurant) {
                   ),
                 )),
           ),
-          Padding(
-              padding: const EdgeInsets.all(8),
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    restaurant.name,
-                    textAlign: TextAlign.start,
-                    style: TextStyle(fontSize: 16),
-                  ),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
+          Expanded(
+              flex: 3,
+              child: Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Icon(Icons.location_pin, size: 20),
                       Text(
-                        restaurant.city,
+                        restaurant.name,
                         textAlign: TextAlign.start,
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Icons.location_pin, size: 20),
+                          Text(
+                            restaurant.city,
+                            textAlign: TextAlign.start,
+                          )
+                        ],
+                      ),
+                      RatingBarIndicator(
+                        rating: restaurant.rating.toDouble(),
+                        direction: Axis.horizontal,
+                        itemCount: 5,
+                        itemBuilder: (context, index) => Icon(
+                          Icons.star,
+                          color: Colors.yellow,
+                        ),
+                        itemSize: 16,
                       )
                     ],
-                  ),
-                  RatingBarIndicator(
-                    rating: restaurant.rating.toDouble(),
-                    direction: Axis.horizontal,
-                    itemCount: 5,
-                    itemBuilder: (context, index) => Icon(
-                      Icons.star,
-                      color: Colors.amber,
-                    ),
-                    itemSize: 16,
-                  )
-                ],
-              ))
+                  )))
         ],
       ),
     ),
@@ -174,17 +184,13 @@ class RestaurantDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
+        body: SingleChildScrollView(
+      child: SafeArea(
           child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ClipRRect(
-              borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(16.0),
-                  bottomRight: Radius.circular(16.0)),
-              child: Hero(
-                  tag: restaurants.id,
-                  child: Image.network(restaurants.pictureId))),
+          Hero(
+              tag: restaurants.id, child: Image.network(restaurants.pictureId)),
           Container(
             padding: const EdgeInsets.all(12.0),
             child: Column(
@@ -210,12 +216,115 @@ class RestaurantDetailPage extends StatelessWidget {
                 SizedBox(height: 16),
                 Text('Description'),
                 SizedBox(height: 4),
-                Text(restaurants.description, textAlign: TextAlign.justify)
+                Text(restaurants.description, textAlign: TextAlign.justify),
+                SizedBox(height: 16),
+                Text(
+                  'Menus',
+                  style: TextStyle(fontSize: 20),
+                ),
+                Container(
+                  height: MediaQuery.of(context).size.height * 0.15,
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    children: restaurants.menus.foods.map((name) {
+                      return Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: Container(
+                            decoration: BoxDecoration(
+                                image: DecorationImage(
+                                    alignment: Alignment.bottomRight,
+                                    image: AssetImage('assets/foods.png')),
+                                color: Colors.grey.withOpacity(0.2),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(8))),
+                            width: 160,
+                            child: Padding(
+                                padding: const EdgeInsets.all(8),
+                                child: Text(name.name,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16)))),
+                      );
+                    }).toList(),
+                  ),
+                ),
+                SizedBox(height: 8),
+                Container(
+                  height: MediaQuery.of(context).size.height * 0.15,
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    children: restaurants.menus.drinks.map((name) {
+                      return Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: Container(
+                            decoration: BoxDecoration(
+                                image: DecorationImage(
+                                    alignment: Alignment.bottomRight,
+                                    image: AssetImage('assets/drinks.png')),
+                                color: Colors.grey.withOpacity(0.2),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(8))),
+                            width: 160,
+                            child: Padding(
+                                padding: const EdgeInsets.all(8),
+                                child: Text(name.name,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16)))),
+                      );
+                    }).toList(),
+                  ),
+                ),
+                SizedBox(height: 16),
+                Text(
+                  'Feedback',
+                  style: TextStyle(fontSize: 20),
+                ),
+                SizedBox(height: 8),
+                RatingBar.builder(
+                  initialRating: 0,
+                  itemCount: 5,
+                  itemBuilder: (context, index) {
+                    switch (index) {
+                      case 0:
+                        return Icon(
+                          Icons.sentiment_very_dissatisfied,
+                          color: Colors.red,
+                        );
+                      case 1:
+                        return Icon(
+                          Icons.sentiment_dissatisfied,
+                          color: Colors.deepOrangeAccent,
+                        );
+                      case 2:
+                        return Icon(
+                          Icons.sentiment_neutral,
+                          color: Colors.amber,
+                        );
+                      case 3:
+                        return Icon(
+                          Icons.sentiment_satisfied,
+                          color: Colors.lightGreen,
+                        );
+                      case 4:
+                        return Icon(
+                          Icons.sentiment_very_satisfied,
+                          color: Colors.green,
+                        );
+                      default:
+                        return Icon(
+                          Icons.sentiment_neutral,
+                          color: Colors.grey,
+                        );
+                    }
+                  },
+                  onRatingUpdate: (rating) {},
+                )
               ],
             ),
           )
         ],
       )),
-    );
+    ));
   }
 }
