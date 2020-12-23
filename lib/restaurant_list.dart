@@ -5,6 +5,8 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:restaurant_app_flutter/detail_page.dart';
 import 'package:restaurant_app_flutter/model/restaurant.dart';
 
+var textStyle = TextStyle(fontFamily: 'Montserrat');
+
 class CustomAppBar extends PreferredSize {
   @override
   Widget build(BuildContext context) {
@@ -15,14 +17,12 @@ class CustomAppBar extends PreferredSize {
           children: [
             Text(
               'Restaurant',
-              style: TextStyle(fontFamily: 'Montserrat', fontSize: 24),
+              style: textStyle.copyWith(fontSize: 24),
             ),
             Text(
               'Recommendation restaurant for you!',
-              style: TextStyle(
-                  fontFamily: 'Montserrat',
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold),
+              style:
+                  textStyle.copyWith(fontSize: 14, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 8)
           ],
@@ -240,10 +240,7 @@ Widget _buildRestaurantItem(BuildContext context, Restaurants restaurant) {
                       Text(
                         restaurant.name,
                         textAlign: TextAlign.start,
-                        style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'Montserrat'),
+                        style: textStyle.copyWith(fontSize: 18),
                       ),
                       Row(
                         mainAxisSize: MainAxisSize.min,
@@ -251,7 +248,7 @@ Widget _buildRestaurantItem(BuildContext context, Restaurants restaurant) {
                           Icon(Icons.location_pin, size: 20),
                           Text(
                             restaurant.city,
-                            style: TextStyle(fontFamily: 'Montserrat'),
+                            style: textStyle,
                             textAlign: TextAlign.start,
                           )
                         ],
