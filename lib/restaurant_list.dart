@@ -54,11 +54,10 @@ class _MainPageState extends State<MainPage>
   @override
   void initState() {
     super.initState();
-    _searchQuery = new TextEditingController();
+    _searchQuery = TextEditingController();
   }
 
   void _startSearch() {
-    print("open search box");
     ModalRoute.of(context)
         .addLocalHistoryEntry(new LocalHistoryEntry(onRemove: _stopSearching));
 
@@ -87,7 +86,7 @@ class _MainPageState extends State<MainPage>
       controller: _searchQuery,
       autofocus: true,
       decoration: const InputDecoration(
-        hintText: 'Search...',
+        hintText: 'Search Restaurant...',
         border: InputBorder.none,
         hintStyle: const TextStyle(color: Colors.white30),
       ),
