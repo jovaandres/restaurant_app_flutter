@@ -2,10 +2,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:restaurant_app_flutter/model/restaurant.dart';
 
-class RestaurantDetailPage extends StatelessWidget {
+class RestaurantDetail extends StatefulWidget {
   static const routeName = '/restaurant_detail';
   final Restaurants restaurants;
-  RestaurantDetailPage({@required this.restaurants});
+  RestaurantDetail({@required this.restaurants});
+  @override
+  _RestaurantDetailState createState() =>
+      _RestaurantDetailState(restaurants: restaurants);
+}
+
+class _RestaurantDetailState extends State<RestaurantDetail> {
+  final Restaurants restaurants;
+  final myController = TextEditingController();
+  List<List<String>> description = [
+    ['Bagas', 'Bagus', '3']
+  ];
+  _RestaurantDetailState({this.restaurants});
+
+  @override
+  void dispose() {
+    myController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -15,30 +33,45 @@ class RestaurantDetailPage extends StatelessWidget {
           child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Hero(
-              tag: restaurants.id,
-              child: Image.network(
-                restaurants.pictureId,
-                loadingBuilder: (BuildContext context, Widget child,
-                    ImageChunkEvent loading) {
-                  if (loading == null) return child;
-                  return Center(
-                    heightFactor: 2,
-                    child: CircularProgressIndicator(
-                      value: loading.expectedTotalBytes != null
-                          ? loading.cumulativeBytesLoaded /
-                              loading.expectedTotalBytes
-                          : null,
-                    ),
-                  );
-                },
-                errorBuilder: (BuildContext context, Object exception,
-                    StackTrace stackTrace) {
-                  return Center(
-                      child: Image.asset('assets/image_error.png',
-                          width: 60, height: 60));
-                },
-              )),
+          Stack(
+            children: [
+              Hero(
+                  tag: restaurants.id,
+                  child: Image.network(
+                    restaurants.pictureId,
+                    loadingBuilder: (BuildContext context, Widget child,
+                        ImageChunkEvent loading) {
+                      if (loading == null) return child;
+                      return Center(
+                        heightFactor: 2,
+                        child: CircularProgressIndicator(
+                          value: loading.expectedTotalBytes != null
+                              ? loading.cumulativeBytesLoaded /
+                                  loading.expectedTotalBytes
+                              : null,
+                        ),
+                      );
+                    },
+                    errorBuilder: (BuildContext context, Object exception,
+                        StackTrace stackTrace) {
+                      return Center(
+                          child: Image.asset('assets/image_error.png',
+                              width: 60, height: 60));
+                    },
+                  )),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.arrow_back),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  )
+                ],
+              ),
+            ],
+          ),
           Container(
             padding: const EdgeInsets.all(12.0),
             child: Column(
@@ -67,6 +100,7 @@ class RestaurantDetailPage extends StatelessWidget {
                 Text(restaurants.description, textAlign: TextAlign.justify),
                 SizedBox(height: 16),
                 Center(child: Text('Menus', style: TextStyle(fontSize: 20))),
+                Divider(color: Colors.black),
                 Container(
                   height: MediaQuery.of(context).size.height * 0.15,
                   child: ListView(
@@ -79,7 +113,7 @@ class RestaurantDetailPage extends StatelessWidget {
                                 image: DecorationImage(
                                     alignment: Alignment.bottomRight,
                                     image: AssetImage('assets/foods.png')),
-                                color: Colors.grey.withOpacity(0.2),
+                                color: Colors.orange.withOpacity(0.2),
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(8))),
                             width: 160,
@@ -94,7 +128,6 @@ class RestaurantDetailPage extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 8),
-                Divider(color: Colors.black),
                 Container(
                   height: MediaQuery.of(context).size.height * 0.15,
                   child: ListView(
@@ -107,7 +140,7 @@ class RestaurantDetailPage extends StatelessWidget {
                                 image: DecorationImage(
                                     alignment: Alignment.bottomRight,
                                     image: AssetImage('assets/drinks.png')),
-                                color: Colors.grey.withOpacity(0.2),
+                                color: Colors.greenAccent.withOpacity(0.2),
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(8))),
                             width: 160,
@@ -121,6 +154,7 @@ class RestaurantDetailPage extends StatelessWidget {
                     }).toList(),
                   ),
                 ),
+                Divider(color: Colors.black),
                 SizedBox(height: 16),
                 Center(
                   child: Column(
@@ -191,6 +225,7 @@ class RestaurantDetailPage extends StatelessWidget {
                                                   MainAxisAlignment.start,
                                               children: [
                                                 TextField(
+                                                  controller: myController,
                                                   decoration: InputDecoration(
                                                       hintText: 'Tulis Review'),
                                                 ),
@@ -199,6 +234,11 @@ class RestaurantDetailPage extends StatelessWidget {
                                                   color: Colors.greenAccent,
                                                   child: Text('SEND'),
                                                   onPressed: () {
+                                                    description.add([
+                                                      'You',
+                                                      myController.text,
+                                                      rating.toString()
+                                                    ]);
                                                     Navigator.pop(context);
                                                   },
                                                 )
@@ -211,7 +251,20 @@ class RestaurantDetailPage extends StatelessWidget {
                       )
                     ],
                   ),
-                )
+                ),
+                SizedBox(height: 16),
+                Padding(
+                    padding: const EdgeInsets.only(left: 16),
+                    child: Text('User Review', style: TextStyle(fontSize: 20))),
+                Container(
+                    height: 75 * (description.length).toDouble(),
+                    width: MediaQuery.of(context).size.width * 0.9,
+                    child: ListView.builder(
+                      itemBuilder: (context, index) {
+                        return _buildReview(context, description[index]);
+                      },
+                      itemCount: description.length,
+                    ))
               ],
             ),
           )
@@ -219,4 +272,31 @@ class RestaurantDetailPage extends StatelessWidget {
       )),
     ));
   }
+}
+
+Widget _buildReview(BuildContext context, List<String> description) {
+  return Padding(
+      padding: const EdgeInsets.all(8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Text(description[0]),
+              SizedBox(width: 4),
+              RatingBarIndicator(
+                rating: double.parse(description[2]),
+                direction: Axis.horizontal,
+                itemCount: 5,
+                itemBuilder: (context, index) =>
+                    Icon(Icons.star, color: Colors.yellow),
+                itemSize: 12,
+              )
+            ],
+          ),
+          SizedBox(height: 8),
+          Text(description[1]),
+          Divider(color: Colors.black)
+        ],
+      ));
 }
