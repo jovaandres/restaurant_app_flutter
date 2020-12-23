@@ -3,10 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:restaurant_app_flutter/model/restaurant.dart';
 
+var textStyle = TextStyle(fontFamily: 'Montserrat');
+
 class RestaurantDetail extends StatefulWidget {
   static const routeName = '/restaurant_detail';
   final Restaurants restaurants;
+
   RestaurantDetail({@required this.restaurants});
+
   @override
   _RestaurantDetailState createState() =>
       _RestaurantDetailState(restaurants: restaurants);
@@ -18,6 +22,7 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
   List<List<String>> description = [
     ['Bagas', 'Bagus', '3']
   ];
+
   _RestaurantDetailState({this.restaurants});
 
   @override
@@ -80,7 +85,7 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
               children: [
                 Text(
                   restaurants.name,
-                  style: TextStyle(fontSize: 24),
+                  style: textStyle.copyWith(fontSize: 24),
                   textAlign: TextAlign.left,
                 ),
                 SizedBox(height: 8),
@@ -90,17 +95,23 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
                     Icon(Icons.location_pin, size: 20),
                     Text(
                       restaurants.city,
-                      style: TextStyle(fontSize: 16),
+                      style: textStyle.copyWith(fontSize: 16),
                       textAlign: TextAlign.start,
                     )
                   ],
                 ),
                 SizedBox(height: 16),
-                Text('Description'),
+                Text(
+                  'Description',
+                  style: textStyle.copyWith(fontSize: 20),
+                ),
                 SizedBox(height: 4),
-                Text(restaurants.description, textAlign: TextAlign.justify),
+                Text(restaurants.description,
+                    style: textStyle, textAlign: TextAlign.justify),
                 SizedBox(height: 16),
-                Center(child: Text('Menus', style: TextStyle(fontSize: 20))),
+                Center(
+                    child:
+                        Text('Menus', style: textStyle.copyWith(fontSize: 20))),
                 Divider(color: Colors.black),
                 Container(
                   height: MediaQuery.of(context).size.height * 0.15,
@@ -121,9 +132,9 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
                             child: Padding(
                                 padding: const EdgeInsets.all(8),
                                 child: Text(name.name,
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16)))),
+                                    style: textStyle.copyWith(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold)))),
                       );
                     }).toList(),
                   ),
@@ -148,9 +159,9 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
                             child: Padding(
                                 padding: const EdgeInsets.all(8),
                                 child: Text(name.name,
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16)))),
+                                    style: textStyle.copyWith(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold)))),
                       );
                     }).toList(),
                   ),
@@ -162,7 +173,7 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
                     children: [
                       Text(
                         'Feedback',
-                        style: TextStyle(fontSize: 20),
+                        style: textStyle.copyWith(fontSize: 20),
                       ),
                       SizedBox(height: 8),
                       RatingBar.builder(
@@ -220,7 +231,8 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text('Review Restaurant',
-                                                style: TextStyle(fontSize: 20)),
+                                                style: textStyle.copyWith(
+                                                    fontSize: 20)),
                                             Column(
                                               mainAxisAlignment:
                                                   MainAxisAlignment.start,
@@ -233,7 +245,12 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
                                                 SizedBox(height: 16),
                                                 RaisedButton(
                                                   color: Colors.greenAccent,
-                                                  child: Text('SEND'),
+                                                  child: Text(
+                                                    'SEND',
+                                                    style: textStyle.copyWith(
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
                                                   onPressed: () {
                                                     description.add([
                                                       'You',
@@ -256,7 +273,8 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
                 SizedBox(height: 16),
                 Padding(
                     padding: const EdgeInsets.only(left: 16),
-                    child: Text('User Review', style: TextStyle(fontSize: 20))),
+                    child: Text('User Review',
+                        style: textStyle.copyWith(fontSize: 20))),
                 Container(
                     height: 75 * (description.length).toDouble(),
                     width: MediaQuery.of(context).size.width * 0.9,
@@ -283,7 +301,10 @@ Widget _buildReview(BuildContext context, List<String> description) {
         children: [
           Row(
             children: [
-              Text(description[0]),
+              Text(
+                description[0],
+                style: textStyle,
+              ),
               SizedBox(width: 4),
               RatingBarIndicator(
                 rating: double.parse(description[2]),
@@ -295,8 +316,11 @@ Widget _buildReview(BuildContext context, List<String> description) {
               )
             ],
           ),
-          SizedBox(height: 8),
-          Text(description[1]),
+          SizedBox(height: 12),
+          Text(
+            description[1],
+            style: textStyle,
+          ),
           Divider(color: Colors.black)
         ],
       ));

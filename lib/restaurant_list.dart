@@ -6,14 +6,6 @@ import 'package:restaurant_app_flutter/detail_page.dart';
 import 'package:restaurant_app_flutter/model/restaurant.dart';
 
 class CustomAppBar extends PreferredSize {
-  final Widget child;
-  final double height;
-
-  CustomAppBar({this.child, this.height = 90});
-
-  @override
-  Size get preferredSize => Size.fromHeight(height);
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -23,11 +15,14 @@ class CustomAppBar extends PreferredSize {
           children: [
             Text(
               'Restaurant',
-              style: Theme.of(context).textTheme.headline4,
+              style: TextStyle(fontFamily: 'Montserrat', fontSize: 24),
             ),
             Text(
               'Recommendation restaurant for you!',
-              style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                  fontFamily: 'Montserrat',
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 8)
           ],
@@ -37,6 +32,7 @@ class CustomAppBar extends PreferredSize {
 
 class MainPage extends StatefulWidget {
   static const routeName = '/restaurant_list';
+
   @override
   _MainPageState createState() => new _MainPageState();
 }
@@ -245,7 +241,9 @@ Widget _buildRestaurantItem(BuildContext context, Restaurants restaurant) {
                         restaurant.name,
                         textAlign: TextAlign.start,
                         style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'Montserrat'),
                       ),
                       Row(
                         mainAxisSize: MainAxisSize.min,
@@ -253,6 +251,7 @@ Widget _buildRestaurantItem(BuildContext context, Restaurants restaurant) {
                           Icon(Icons.location_pin, size: 20),
                           Text(
                             restaurant.city,
+                            style: TextStyle(fontFamily: 'Montserrat'),
                             textAlign: TextAlign.start,
                           )
                         ],

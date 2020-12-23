@@ -11,7 +11,6 @@ class MyApp extends StatelessWidget {
       title: 'Restaurant',
       theme: ThemeData(
         brightness: Brightness.dark,
-        primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: MainPage(),
