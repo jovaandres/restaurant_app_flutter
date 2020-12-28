@@ -1,7 +1,6 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:restaurant_app_flutter/api/api_service.dart';
 import 'package:restaurant_app_flutter/detail_page.dart';
 import 'package:restaurant_app_flutter/model/restaurant.dart';
 
@@ -42,6 +41,8 @@ class _MainPageState extends State<MainPage>
   static final GlobalKey<ScaffoldState> scaffoldKey =
       new GlobalKey<ScaffoldState>();
 
+  Future<Restaurant> _restaurant;
+
   TextEditingController _searchQuery;
   bool _isSearching = false;
   String searchQuery = "";
@@ -51,6 +52,7 @@ class _MainPageState extends State<MainPage>
   void initState() {
     super.initState();
     _searchQuery = TextEditingController();
+    _restaurant = ApiService().getRestaurantList();
   }
 
   void _startSearch() {
@@ -138,25 +140,36 @@ class _MainPageState extends State<MainPage>
               children: <Widget>[
                 Expanded(
                     flex: 9,
-                    child: FutureBuilder<String>(
-                      future: DefaultAssetBundle.of(context)
-                          .loadString('assets/local_restaurant.json'),
-                      builder: (context, snapshot) {
-                        List<Restaurants> list = parseRestaurant(snapshot.data);
-                        restaurants = searchQuery != ""
-                            ? list
-                                .where((i) => i.name
-                                    .toLowerCase()
-                                    .contains(searchQuery.toLowerCase()))
-                                .toList()
-                            : list;
-                        return ListView.builder(
-                            padding: const EdgeInsets.all(8.0),
-                            itemCount: restaurants.length,
-                            itemBuilder: (context, index) {
-                              return _buildRestaurantItem(
-                                  context, restaurants[index]);
-                            });
+                    child: FutureBuilder(
+                      future: _restaurant,
+                      builder: (context, AsyncSnapshot<Restaurant> snapshot) {
+                        var state = snapshot.connectionState;
+                        if (state != ConnectionState.done) {
+                          return Center(child: CircularProgressIndicator());
+                        } else {
+                          if (snapshot.hasData) {
+                            List<Restaurants> list = snapshot.data.restaurants;
+                            restaurants = searchQuery != ""
+                                ? list
+                                    .where((i) => i.name
+                                        .toLowerCase()
+                                        .contains(searchQuery.toLowerCase()))
+                                    .toList()
+                                : list;
+                            return ListView.builder(
+                                padding: const EdgeInsets.all(8.0),
+                                itemCount: restaurants.length,
+                                itemBuilder: (context, index) {
+                                  return _buildRestaurantItem(
+                                      context, restaurants[index]);
+                                });
+                          } else if (snapshot.hasError) {
+                            return Center(
+                                child: Text(snapshot.error.toString()));
+                          } else {
+                            return Text('');
+                          }
+                        }
                       },
                     ))
               ],
@@ -172,7 +185,7 @@ Widget _buildRestaurantItem(BuildContext context, Restaurants restaurant) {
   return GestureDetector(
     onTap: () {
       Navigator.pushNamed(context, RestaurantDetail.routeName,
-          arguments: restaurant);
+          arguments: restaurant.id);
     },
     child: Container(
       padding: const EdgeInsets.all(4),
@@ -204,7 +217,7 @@ Widget _buildRestaurantItem(BuildContext context, Restaurants restaurant) {
                 child: Hero(
                   tag: restaurant.id,
                   child: Image.network(
-                    restaurant.pictureId,
+                    'https://restaurant-api.dicoding.dev/images/small/${restaurant.pictureId}',
                     width: 125,
                     loadingBuilder: (BuildContext context, Widget child,
                         ImageChunkEvent loading) {
@@ -270,13 +283,4 @@ Widget _buildRestaurantItem(BuildContext context, Restaurants restaurant) {
       ),
     ),
   );
-}
-
-List<Restaurants> parseRestaurant(String json) {
-  if (json == null) {
-    return [];
-  }
-
-  Restaurant restaurant = Restaurant.fromJson(jsonDecode(json));
-  return restaurant.restaurants;
 }
