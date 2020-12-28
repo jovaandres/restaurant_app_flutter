@@ -1,183 +1,68 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:restaurant_app_flutter/api/api_service.dart';
+import 'package:provider/provider.dart';
+import 'package:restaurant_app_flutter/data/api/api_service.dart';
 import 'package:restaurant_app_flutter/detail_page.dart';
-import 'package:restaurant_app_flutter/model/restaurant.dart';
+import 'package:restaurant_app_flutter/data/model/restaurant.dart';
+import 'package:restaurant_app_flutter/provider/restaurant_provider.dart';
+import 'package:restaurant_app_flutter/ui/cutom_app_bar.dart';
 
 var textStyle = TextStyle(fontFamily: 'Montserrat');
 
-class CustomAppBar extends PreferredSize {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        width: MediaQuery.of(context).size.width,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Restaurant',
-              style: textStyle.copyWith(fontSize: 24),
-            ),
-            Text(
-              'Recommendation restaurant for you!',
-              style:
-                  textStyle.copyWith(fontSize: 14, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 8)
-          ],
-        ));
-  }
-}
-
-class MainPage extends StatefulWidget {
+class MainPage extends StatelessWidget {
   static const routeName = '/restaurant_list';
 
   @override
-  _MainPageState createState() => new _MainPageState();
+  Widget build(BuildContext context) {
+    Widget restaurantListPage = ChangeNotifierProvider<RestaurantProvider>(
+      create: (_) => RestaurantProvider(apiService: ApiService()),
+      child: RestaurantListPage(),
+    );
+    return restaurantListPage;
+  }
 }
 
-class _MainPageState extends State<MainPage>
-    with SingleTickerProviderStateMixin {
-  static final GlobalKey<ScaffoldState> scaffoldKey =
-      new GlobalKey<ScaffoldState>();
-
-  Future<Restaurant> _restaurant;
-
-  TextEditingController _searchQuery;
-  bool _isSearching = false;
-  String searchQuery = "";
-  List<Restaurants> restaurants;
-
-  @override
-  void initState() {
-    super.initState();
-    _searchQuery = TextEditingController();
-    _restaurant = ApiService().getRestaurantList();
-  }
-
-  void _startSearch() {
-    ModalRoute.of(context)
-        .addLocalHistoryEntry(new LocalHistoryEntry(onRemove: _stopSearching));
-
-    setState(() {
-      _isSearching = true;
-    });
-  }
-
-  void _stopSearching() {
-    _clearSearchQuery();
-
-    setState(() {
-      _isSearching = false;
-    });
-  }
-
-  void _clearSearchQuery() {
-    setState(() {
-      _searchQuery.clear();
-      updateSearchQuery("");
-    });
-  }
-
-  Widget _buildSearchField() {
-    return TextField(
-      controller: _searchQuery,
-      autofocus: true,
-      decoration: const InputDecoration(
-        hintText: 'Search Restaurant...',
-        border: InputBorder.none,
-        hintStyle: const TextStyle(color: Colors.white30),
-      ),
-      style: const TextStyle(color: Colors.white, fontSize: 16.0),
-      onChanged: updateSearchQuery,
+class RestaurantListPage extends StatelessWidget {
+  Widget _buildList() {
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: <Widget>[
+        Expanded(
+            flex: 9,
+            child: Consumer<RestaurantProvider>(
+              builder: (context, state, _) {
+                if (state.state == ResultState.Loading) {
+                  return Center(child: CircularProgressIndicator());
+                } else if (state.state == ResultState.HasData) {
+                  return ListView.builder(
+                      shrinkWrap: true,
+                      padding: const EdgeInsets.all(8.0),
+                      itemCount: state.result.restaurants.length,
+                      itemBuilder: (context, index) {
+                        return _buildRestaurantItem(
+                            context, state.result.restaurants[index]);
+                      });
+                } else if (state.state == ResultState.NoData ||
+                    state.state == ResultState.Error) {
+                  return Center(child: Text(state.message));
+                } else {
+                  return Center(child: Text('awdaad'));
+                }
+              },
+            ))
+      ],
     );
-  }
-
-  void updateSearchQuery(String newQuery) {
-    setState(() {
-      searchQuery = newQuery;
-    });
-  }
-
-  List<Widget> _buildActions() {
-    if (_isSearching) {
-      return <Widget>[
-        new IconButton(
-          icon: const Icon(Icons.clear),
-          onPressed: () {
-            if (_searchQuery.text == "" || _searchQuery.text.isEmpty) {
-              Navigator.pop(context);
-              return;
-            }
-            _clearSearchQuery();
-          },
-        ),
-      ];
-    }
-
-    return <Widget>[
-      new IconButton(
-        icon: const Icon(Icons.search),
-        onPressed: _startSearch,
-      ),
-    ];
   }
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      key: scaffoldKey,
-      appBar: new AppBar(
-        title: _isSearching ? _buildSearchField() : CustomAppBar(),
-        actions: _buildActions(),
-      ),
-      body: new Builder(
-        builder: (BuildContext context) {
-          return SafeArea(
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Expanded(
-                    flex: 9,
-                    child: FutureBuilder(
-                      future: _restaurant,
-                      builder: (context, AsyncSnapshot<Restaurant> snapshot) {
-                        var state = snapshot.connectionState;
-                        if (state != ConnectionState.done) {
-                          return Center(child: CircularProgressIndicator());
-                        } else {
-                          if (snapshot.hasData) {
-                            List<Restaurants> list = snapshot.data.restaurants;
-                            restaurants = searchQuery != ""
-                                ? list
-                                    .where((i) => i.name
-                                        .toLowerCase()
-                                        .contains(searchQuery.toLowerCase()))
-                                    .toList()
-                                : list;
-                            return ListView.builder(
-                                padding: const EdgeInsets.all(8.0),
-                                itemCount: restaurants.length,
-                                itemBuilder: (context, index) {
-                                  return _buildRestaurantItem(
-                                      context, restaurants[index]);
-                                });
-                          } else if (snapshot.hasError) {
-                            return Center(
-                                child: Text(snapshot.error.toString()));
-                          } else {
-                            return Text('');
-                          }
-                        }
-                      },
-                    ))
-              ],
-            ),
-          );
-        },
-      ),
-    );
+    return Scaffold(
+        appBar: AppBar(
+            title: CustomAppBar(
+          onPressed: () {},
+        )),
+        body: _buildList());
   }
 }
 
