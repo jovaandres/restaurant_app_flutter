@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-var textStyle = TextStyle(fontFamily: 'Montserrat');
+import 'package:restaurant_app_flutter/common/constant.dart';
 
 class CustomAppBar extends PreferredSize {
   final double height;

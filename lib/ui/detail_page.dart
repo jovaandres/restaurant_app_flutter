@@ -2,11 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:provider/provider.dart';
+import 'package:restaurant_app_flutter/common/constant.dart';
 import 'package:restaurant_app_flutter/data/api/api_service.dart';
 import 'package:restaurant_app_flutter/data/model/restaurant_detail.dart';
 import 'package:restaurant_app_flutter/provider/detail_provider.dart';
-
-var textStyle = TextStyle(fontFamily: 'Montserrat');
 
 class RestaurantDetail extends StatefulWidget {
   static const routeName = '/restaurant_detail';
@@ -33,11 +32,11 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
   Widget build(BuildContext context) {
     return Scaffold(body: SingleChildScrollView(
       child: Consumer<DetailProvider>(builder: (context, state, _) {
-        if (state.state == DetailResultState.Loading) {
+        if (state.state == ResultState.Loading) {
           return Container(
               height: MediaQuery.of(context).size.height,
               child: Center(child: CircularProgressIndicator()));
-        } else if (state.state == DetailResultState.HasData) {
+        } else if (state.state == ResultState.HasData) {
           return SafeArea(
               child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -47,7 +46,7 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
                   Hero(
                       tag: state.result.id,
                       child: Image.network(
-                        'https://restaurant-api.dicoding.dev/images/medium/${state.result.pictureId}',
+                        mediumImage + state.result.pictureId,
                         loadingBuilder: (BuildContext context, Widget child,
                             ImageChunkEvent loading) {
                           if (loading == null) return child;
@@ -316,8 +315,8 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
               )
             ],
           ));
-        } else if (state.state == DetailResultState.NoData ||
-            state.state == DetailResultState.Error) {
+        } else if (state.state == ResultState.NoData ||
+            state.state == ResultState.Error) {
           return Center(child: Text(state.message));
         } else {
           return Center(child: Text(''));

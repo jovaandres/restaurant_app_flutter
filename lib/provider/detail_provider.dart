@@ -1,8 +1,7 @@
 import 'package:flutter/cupertino.dart';
+import 'package:restaurant_app_flutter/common/constant.dart';
 import 'package:restaurant_app_flutter/data/api/api_service.dart';
 import 'package:restaurant_app_flutter/data/model/restaurant_detail.dart';
-
-enum DetailResultState { Loading, NoData, HasData, Error }
 
 class DetailProvider extends ChangeNotifier {
   final myController1 = TextEditingController();
@@ -17,28 +16,28 @@ class DetailProvider extends ChangeNotifier {
 
   DetailRestaurant _restaurantResult;
   String _message;
-  DetailResultState _state;
+  ResultState _state;
 
   DetailRestaurant get result => _restaurantResult;
   String get message => _message;
-  DetailResultState get state => _state;
+  ResultState get state => _state;
 
   Future<dynamic> fetchRestaurantDetail() async {
     try {
-      _state = DetailResultState.Loading;
+      _state = ResultState.Loading;
       notifyListeners();
       final restaurant = await apiService.getRestaurantDetail(id);
       if (restaurant.restaurant.id == null) {
-        _state = DetailResultState.NoData;
+        _state = ResultState.NoData;
         notifyListeners();
         _message = 'Empty Data';
       } else {
-        _state = DetailResultState.HasData;
+        _state = ResultState.HasData;
         notifyListeners();
         return _restaurantResult = restaurant.restaurant;
       }
     } catch (e) {
-      _state = DetailResultState.Error;
+      _state = ResultState.Error;
       notifyListeners();
       return _message = 'Error->>$e';
     }

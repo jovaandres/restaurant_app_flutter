@@ -3,10 +3,11 @@ import 'package:restaurant_app_flutter/common/constant.dart';
 import 'package:restaurant_app_flutter/data/api/api_service.dart';
 import 'package:restaurant_app_flutter/data/model/restaurant.dart';
 
-class RestaurantProvider extends ChangeNotifier {
+class SearchProvider extends ChangeNotifier {
   final ApiService apiService;
-  RestaurantProvider({this.apiService}) {
-    fetchRestaurantList();
+
+  SearchProvider({this.apiService}) {
+    fetchSearchedRestaurant();
   }
 
   Restaurant _restaurantResult;
@@ -17,11 +18,11 @@ class RestaurantProvider extends ChangeNotifier {
   String get message => _message;
   ResultState get state => _state;
 
-  Future<dynamic> fetchRestaurantList() async {
+  Future<dynamic> fetchSearchedRestaurant({String query: ""}) async {
     try {
       _state = ResultState.Loading;
       notifyListeners();
-      final restaurant = await apiService.getRestaurantList();
+      final restaurant = await apiService.searchRestaurant(query);
       if (restaurant.restaurants.isEmpty) {
         _state = ResultState.NoData;
         notifyListeners();

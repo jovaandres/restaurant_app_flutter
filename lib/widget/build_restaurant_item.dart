@@ -1,72 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:provider/provider.dart';
-import 'package:restaurant_app_flutter/data/api/api_service.dart';
-import 'package:restaurant_app_flutter/detail_page.dart';
+import 'package:restaurant_app_flutter/common/constant.dart';
 import 'package:restaurant_app_flutter/data/model/restaurant.dart';
-import 'package:restaurant_app_flutter/provider/restaurant_provider.dart';
-import 'package:restaurant_app_flutter/ui/cutom_app_bar.dart';
+import 'package:restaurant_app_flutter/ui/detail_page.dart';
 
-var textStyle = TextStyle(fontFamily: 'Montserrat');
-
-class MainPage extends StatelessWidget {
-  static const routeName = '/restaurant_list';
-
-  @override
-  Widget build(BuildContext context) {
-    Widget restaurantListPage = ChangeNotifierProvider<RestaurantProvider>(
-      create: (_) => RestaurantProvider(apiService: ApiService()),
-      child: RestaurantListPage(),
-    );
-    return restaurantListPage;
-  }
-}
-
-class RestaurantListPage extends StatelessWidget {
-  Widget _buildList() {
-    return Column(
-      mainAxisSize: MainAxisSize.max,
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: <Widget>[
-        Expanded(
-            flex: 9,
-            child: Consumer<RestaurantProvider>(
-              builder: (context, state, _) {
-                if (state.state == ResultState.Loading) {
-                  return Center(child: CircularProgressIndicator());
-                } else if (state.state == ResultState.HasData) {
-                  return ListView.builder(
-                      shrinkWrap: true,
-                      padding: const EdgeInsets.all(8.0),
-                      itemCount: state.result.restaurants.length,
-                      itemBuilder: (context, index) {
-                        return _buildRestaurantItem(
-                            context, state.result.restaurants[index]);
-                      });
-                } else if (state.state == ResultState.NoData ||
-                    state.state == ResultState.Error) {
-                  return Center(child: Text(state.message));
-                } else {
-                  return Center(child: Text('awdaad'));
-                }
-              },
-            ))
-      ],
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-            title: CustomAppBar(
-          onPressed: () {},
-        )),
-        body: _buildList());
-  }
-}
-
-Widget _buildRestaurantItem(BuildContext context, Restaurants restaurant) {
+Widget buildRestaurantItem(BuildContext context, Restaurants restaurant) {
   return GestureDetector(
     onTap: () {
       Navigator.pushNamed(context, RestaurantDetail.routeName,
@@ -102,7 +40,7 @@ Widget _buildRestaurantItem(BuildContext context, Restaurants restaurant) {
                 child: Hero(
                   tag: restaurant.id,
                   child: Image.network(
-                    'https://restaurant-api.dicoding.dev/images/small/${restaurant.pictureId}',
+                    smallImage + restaurant.pictureId,
                     width: 125,
                     loadingBuilder: (BuildContext context, Widget child,
                         ImageChunkEvent loading) {

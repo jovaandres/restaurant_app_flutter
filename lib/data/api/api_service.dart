@@ -26,6 +26,15 @@ class ApiService {
     }
   }
 
+  Future<Restaurant> searchRestaurant(String query) async {
+    final response = await http.get(_baseUrl + 'search?q=$query');
+    if (response.statusCode == 200) {
+      return Restaurant.fromJsonSearch(jsonDecode(response.body));
+    } else {
+      throw Exception('Failed to load restaurant');
+    }
+  }
+
   Future<http.Response> addReview(String id, String name, String review) {
     return http.post(_baseUrl + 'review',
         headers: <String, String>{
