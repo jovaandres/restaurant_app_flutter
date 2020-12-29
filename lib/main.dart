@@ -5,7 +5,7 @@ import 'package:restaurant_app_flutter/provider/detail_provider.dart';
 import 'package:restaurant_app_flutter/provider/search_provider.dart';
 import 'package:restaurant_app_flutter/ui/detail_page.dart';
 import 'package:restaurant_app_flutter/ui/restaurant_list.dart';
-import 'package:restaurant_app_flutter/widget/search_page.dart';
+import 'package:restaurant_app_flutter/ui/search_page.dart';
 
 ApiService apiService = ApiService();
 

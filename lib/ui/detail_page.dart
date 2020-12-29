@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -6,6 +8,7 @@ import 'package:restaurant_app_flutter/common/constant.dart';
 import 'package:restaurant_app_flutter/data/api/api_service.dart';
 import 'package:restaurant_app_flutter/data/model/restaurant_detail.dart';
 import 'package:restaurant_app_flutter/provider/detail_provider.dart';
+import 'package:restaurant_app_flutter/widget/empty_list.dart';
 
 class RestaurantDetail extends StatefulWidget {
   static const routeName = '/restaurant_detail';
@@ -219,56 +222,56 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
                             onRatingUpdate: (rating) {
                               showDialog(
                                   context: context,
-                                  child: SimpleDialog(
-                                      title: Text('Review Restaurant',
-                                          style:
-                                              textStyle.copyWith(fontSize: 20),
-                                          textAlign: TextAlign.center),
-                                      contentPadding: const EdgeInsets.all(16),
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(24)),
-                                      children: [
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              children: [
-                                                TextField(
-                                                  controller: myController1,
-                                                  decoration: InputDecoration(
-                                                      hintText: 'Nama Kamu'),
-                                                ),
-                                                Form(
-                                                    key: _formKey,
-                                                    child: TextFormField(
-                                                      validator: (value) {
-                                                        if (value.isEmpty) {
-                                                          return 'Tulis Review Sedikitnya Satu Kata';
-                                                        }
-                                                        return null;
-                                                      },
-                                                      controller: myController2,
-                                                      decoration: InputDecoration(
-                                                          hintText:
-                                                              'Tulis Review'),
-                                                    )),
-                                                SizedBox(height: 16),
-                                                RaisedButton(
-                                                  color: Colors.greenAccent,
-                                                  child: Text(
-                                                    'SEND',
-                                                    style: textStyle.copyWith(
-                                                        fontWeight:
-                                                            FontWeight.bold),
+                                  builder: (context) {
+                                    return Platform.isAndroid
+                                        ? SimpleDialog(
+                                            title: Text('Review Restaurant',
+                                                style: textStyle.copyWith(
+                                                    fontSize: 20),
+                                                textAlign: TextAlign.center),
+                                            contentPadding:
+                                                const EdgeInsets.all(16),
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(24)),
+                                            children: [
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  TextField(
+                                                    controller: myController1,
+                                                    decoration: InputDecoration(
+                                                        hintText: 'Nama Kamu'),
                                                   ),
-                                                  onPressed: () {
-                                                    setState(() {
+                                                  Form(
+                                                      key: _formKey,
+                                                      child: TextFormField(
+                                                        validator: (value) {
+                                                          if (value.isEmpty) {
+                                                            return 'Tulis Review Sedikitnya Satu Kata';
+                                                          }
+                                                          return null;
+                                                        },
+                                                        controller:
+                                                            myController2,
+                                                        decoration: InputDecoration(
+                                                            hintText:
+                                                                'Tulis Review'),
+                                                      )),
+                                                  SizedBox(height: 16),
+                                                  RaisedButton(
+                                                    color: Colors.greenAccent,
+                                                    child: Text(
+                                                      'SEND',
+                                                      style: textStyle.copyWith(
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                    ),
+                                                    onPressed: () {
                                                       if (_formKey.currentState
                                                           .validate()) {
                                                         ApiService().addReview(
@@ -279,17 +282,61 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
                                                                     .text
                                                                 : 'Anonim',
                                                             myController2.text);
-
                                                         Navigator.pop(context);
                                                       }
-                                                    });
-                                                  },
-                                                )
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ]));
+                                                    },
+                                                  )
+                                                ],
+                                              ),
+                                            ],
+                                          )
+                                        : CupertinoAlertDialog(
+                                            title: Text('Review Restaurant',
+                                                style: textStyle.copyWith(
+                                                    fontSize: 20),
+                                                textAlign: TextAlign.center),
+                                            content: Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 16),
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    CupertinoTextField(
+                                                      controller: myController1,
+                                                      placeholder: 'Nama Kamu',
+                                                      style: TextStyle(
+                                                          color: Colors.white),
+                                                    ),
+                                                    SizedBox(height: 8),
+                                                    CupertinoTextField(
+                                                      controller: myController2,
+                                                      placeholder:
+                                                          'Tulis Review',
+                                                      style: TextStyle(
+                                                          color: Colors.white),
+                                                    )
+                                                  ],
+                                                )),
+                                            actions: [
+                                              CupertinoDialogAction(
+                                                  child: Text('SEND'),
+                                                  onPressed: () {
+                                                    ApiService().addReview(
+                                                        state.result.id,
+                                                        myController1
+                                                                .text.isNotEmpty
+                                                            ? myController1.text
+                                                            : 'Anonim',
+                                                        myController2.text);
+                                                    Navigator.pop(context);
+                                                  })
+                                            ],
+                                          );
+                                  });
                             },
                           )
                         ],
@@ -318,8 +365,9 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
               )
             ],
           ));
-        } else if (state.state == ResultState.NoData ||
-            state.state == ResultState.Error) {
+        } else if (state.state == ResultState.NoData) {
+          return EmptyWidget(message: 'Data tidak berhasil ditampilkan');
+        } else if (state.state == ResultState.Error) {
           return Center(child: Text(state.message));
         } else {
           return Center(child: Text(''));

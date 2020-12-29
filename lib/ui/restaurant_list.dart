@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:restaurant_app_flutter/common/constant.dart';
 import 'package:restaurant_app_flutter/provider/restaurant_provider.dart';
-import 'package:restaurant_app_flutter/ui/cutom_app_bar.dart';
+import 'package:restaurant_app_flutter/ui/search_page.dart';
 import 'package:restaurant_app_flutter/widget/build_restaurant_item.dart';
-import 'package:restaurant_app_flutter/widget/search_page.dart';
 import 'package:restaurant_app_flutter/main.dart';
+import 'package:restaurant_app_flutter/widget/custom_app_bar.dart';
+import 'package:restaurant_app_flutter/widget/empty_list.dart';
+import 'package:restaurant_app_flutter/widget/no_connection_widget.dart';
 
 class MainPage extends StatelessWidget {
   static const routeName = '/restaurant_list';
@@ -46,9 +48,10 @@ Widget _buildList() {
                       return buildRestaurantItem(
                           context, state.result.restaurants[index]);
                     });
-              } else if (state.state == ResultState.NoData ||
-                  state.state == ResultState.Error) {
-                return Center(child: Text(state.message));
+              } else if (state.state == ResultState.NoData) {
+                return EmptyWidget(message: 'Data tidak berhasil ditampilkan');
+              } else if (state.state == ResultState.Error) {
+                return NoConnectionWidget();
               } else {
                 return Center(child: Text(''));
               }

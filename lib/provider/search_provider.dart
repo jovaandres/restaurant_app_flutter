@@ -15,7 +15,9 @@ class SearchProvider extends ChangeNotifier {
   ResultState _state;
 
   Restaurant get result => _restaurantResult;
+
   String get message => _message;
+
   ResultState get state => _state;
 
   Future<dynamic> fetchSearchedRestaurant({String query: ""}) async {

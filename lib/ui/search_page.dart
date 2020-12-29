@@ -3,6 +3,10 @@ import 'package:provider/provider.dart';
 import 'package:restaurant_app_flutter/common/constant.dart';
 import 'package:restaurant_app_flutter/provider/search_provider.dart';
 import 'package:restaurant_app_flutter/widget/build_restaurant_item.dart';
+import 'package:restaurant_app_flutter/widget/empty_list.dart';
+import 'package:rxdart/rxdart.dart';
+
+var textQuery = BehaviorSubject<String>();
 
 class SearchPage extends StatefulWidget {
   static const routeName = '/search_page';
@@ -11,24 +15,31 @@ class SearchPage extends StatefulWidget {
   _SearchPageState createState() => _SearchPageState();
 }
 
-class _SearchPageState extends State<SearchPage> {
+class _SearchPageState extends State<SearchPage>
+    with SingleTickerProviderStateMixin {
   TextEditingController myController;
 
   @override
   void initState() {
     myController = TextEditingController();
+    myController.addListener(updateList);
     super.initState();
   }
 
   @override
   void dispose() {
-    super.dispose();
+    myController.removeListener(updateList);
     myController.dispose();
+    textQuery.close();
+    super.dispose();
   }
 
-  void updateList(String newQuery) {
-    Provider.of<SearchProvider>(context, listen: false)
-        .fetchSearchedRestaurant(query: newQuery);
+  updateList() {
+    textQuery.add(myController.text);
+    textQuery.debounceTime(Duration(milliseconds: 500)).listen((query) {
+      Provider.of<SearchProvider>(context, listen: false)
+          .fetchSearchedRestaurant(query: query);
+    });
   }
 
   @override
@@ -42,7 +53,6 @@ class _SearchPageState extends State<SearchPage> {
                 padding: const EdgeInsets.all(8),
                 child: Container(
                   height: 40,
-                  width: MediaQuery.of(context).size.width * 0.9,
                   padding: const EdgeInsets.symmetric(horizontal: 8),
                   decoration: BoxDecoration(
                       color: Colors.white,
@@ -53,8 +63,7 @@ class _SearchPageState extends State<SearchPage> {
                           border: InputBorder.none,
                           hintText: 'Search by name or menu',
                           hintStyle: TextStyle(color: Colors.grey)),
-                      controller: myController,
-                      onChanged: updateList),
+                      controller: myController),
                 )),
             Expanded(
                 flex: 9,
@@ -73,8 +82,10 @@ class _SearchPageState extends State<SearchPage> {
                                 return buildRestaurantItem(
                                     context, state.result.restaurants[index]);
                               });
-                        } else if (state.state == ResultState.NoData ||
-                            state.state == ResultState.Error) {
+                        } else if (state.state == ResultState.NoData) {
+                          return EmptyWidget(
+                              message: 'Coba mencari dengan kata kunci lain');
+                        } else if (state.state == ResultState.Error) {
                           return Center(child: Text(state.message));
                         } else {
                           return Center(child: Text(''));

@@ -19,7 +19,9 @@ class DetailProvider extends ChangeNotifier {
   ResultState _state;
 
   DetailRestaurant get result => _restaurantResult;
+
   String get message => _message;
+
   ResultState get state => _state;
 
   Future<dynamic> fetchRestaurantDetail() async {

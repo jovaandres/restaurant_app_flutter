@@ -31,6 +31,8 @@ dependencies:
   flutter_rating_bar: ^3.2.0+1
   http: ^0.12.2
   provider: ^4.3.2+3
+  rxdart: ^0.25.0
+  empty_widget: ^0.0.1
 
 dev_dependencies:
   flutter_test:
