@@ -4,6 +4,7 @@ import 'package:restaurant_app_flutter/common/constant.dart';
 class CustomAppBar extends PreferredSize {
   final double height;
   final Function onPressed;
+
   CustomAppBar({this.height = kToolbarHeight, @required this.onPressed});
 
   @override
