@@ -106,6 +106,11 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
                         )
                       ],
                     ),
+                    Text(
+                      state.result.address,
+                      style: textStyle.copyWith(fontSize: 14),
+                      textAlign: TextAlign.start,
+                    ),
                     SizedBox(height: 16),
                     Text(
                       'Description',
@@ -114,6 +119,29 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
                     SizedBox(height: 4),
                     Text(state.result.description,
                         style: textStyle, textAlign: TextAlign.justify),
+                    SizedBox(height: 16),
+                    Text('Category', style: textStyle.copyWith(fontSize: 16)),
+                    Container(
+                        height: 50,
+                        child: ListView(
+                          scrollDirection: Axis.horizontal,
+                          children: state.result.categories.map((category) {
+                            return Padding(
+                              padding: const EdgeInsets.all(8),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                    color: Colors.lightBlue),
+                                child: Padding(
+                                    padding: const EdgeInsets.all(6),
+                                    child: Text(
+                                      category.name,
+                                      style: textStyle.copyWith(fontSize: 14),
+                                    )),
+                              ),
+                            );
+                          }).toList(),
+                        )),
                     SizedBox(height: 16),
                     Center(
                         child: Text('Menus',

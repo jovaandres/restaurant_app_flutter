@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 class EmptyWidget extends StatelessWidget {
   final String message;
+
   EmptyWidget({@required this.message});
 
   Widget build(BuildContext context) {

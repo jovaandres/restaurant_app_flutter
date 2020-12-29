@@ -4,9 +4,6 @@ import 'package:restaurant_app_flutter/data/api/api_service.dart';
 import 'package:restaurant_app_flutter/data/model/restaurant_detail.dart';
 
 class DetailProvider extends ChangeNotifier {
-  final myController1 = TextEditingController();
-  final myController2 = TextEditingController();
-
   final ApiService apiService;
   final String id;
 
