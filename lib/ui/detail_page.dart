@@ -9,6 +9,7 @@ import 'package:restaurant_app_flutter/data/api/api_service.dart';
 import 'package:restaurant_app_flutter/data/model/restaurant_detail.dart';
 import 'package:restaurant_app_flutter/provider/detail_provider.dart';
 import 'package:restaurant_app_flutter/widget/empty_list.dart';
+import 'package:restaurant_app_flutter/widget/no_connection_widget.dart';
 
 class RestaurantDetail extends StatefulWidget {
   static const routeName = '/restaurant_detail';
@@ -396,7 +397,7 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
         } else if (state.state == ResultState.NoData) {
           return EmptyWidget(message: 'Data tidak berhasil ditampilkan');
         } else if (state.state == ResultState.Error) {
-          return Center(child: Text(state.message));
+          return NoConnectionWidget();
         } else {
           return Center(child: Text(''));
         }
