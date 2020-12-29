@@ -1,22 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:restaurant_app_flutter/common/constant.dart';
-import 'package:restaurant_app_flutter/data/api/api_service.dart';
 import 'package:restaurant_app_flutter/provider/restaurant_provider.dart';
 import 'package:restaurant_app_flutter/ui/cutom_app_bar.dart';
 import 'package:restaurant_app_flutter/widget/build_restaurant_item.dart';
 import 'package:restaurant_app_flutter/widget/search_page.dart';
+import 'package:restaurant_app_flutter/main.dart';
 
-class MainPage extends StatefulWidget {
+class MainPage extends StatelessWidget {
   static const routeName = '/restaurant_list';
-
-  @override
-  _MainPageState createState() => _MainPageState();
-}
-
-class _MainPageState extends State<MainPage> {
-  Widget buildList = ChangeNotifierProvider<RestaurantProvider>(
-    create: (_) => RestaurantProvider(apiService: ApiService()),
+  final Widget buildList = ChangeNotifierProvider<RestaurantProvider>(
+    create: (_) => RestaurantProvider(apiService: apiService),
     child: _buildList(),
   );
 

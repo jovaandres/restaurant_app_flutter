@@ -20,6 +20,7 @@ class RestaurantDetail extends StatefulWidget {
 class _RestaurantDetailState extends State<RestaurantDetail> {
   final myController1 = TextEditingController();
   final myController2 = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void dispose() {
@@ -218,75 +219,77 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
                             onRatingUpdate: (rating) {
                               showDialog(
                                   context: context,
-                                  child: Dialog(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(24)),
-                                    child: Container(
-                                        width: 200,
-                                        height: 240,
-                                        child: Padding(
-                                            padding: const EdgeInsets.all(16),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
+                                  child: SimpleDialog(
+                                      title: Text('Review Restaurant',
+                                          style:
+                                              textStyle.copyWith(fontSize: 20),
+                                          textAlign: TextAlign.center),
+                                      contentPadding: const EdgeInsets.all(16),
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(24)),
+                                      children: [
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Column(
                                               mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
+                                                  MainAxisAlignment.start,
                                               children: [
-                                                Text('Review Restaurant',
-                                                    style: textStyle.copyWith(
-                                                        fontSize: 20)),
-                                                Column(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
-                                                  children: [
-                                                    TextField(
-                                                      controller: myController1,
-                                                      decoration:
-                                                          InputDecoration(
-                                                              hintText:
-                                                                  'Nama Kamu'),
-                                                    ),
-                                                    Divider(
-                                                        color: Colors.black),
-                                                    TextField(
+                                                TextField(
+                                                  controller: myController1,
+                                                  decoration: InputDecoration(
+                                                      hintText: 'Nama Kamu'),
+                                                ),
+                                                Form(
+                                                    key: _formKey,
+                                                    child: TextFormField(
+                                                      validator: (value) {
+                                                        if (value.isEmpty) {
+                                                          return 'Tulis Review Sedikitnya Satu Kata';
+                                                        }
+                                                        return null;
+                                                      },
                                                       controller: myController2,
                                                       decoration: InputDecoration(
                                                           hintText:
                                                               'Tulis Review'),
-                                                    ),
-                                                    SizedBox(height: 16),
-                                                    RaisedButton(
-                                                      color: Colors.greenAccent,
-                                                      child: Text(
-                                                        'SEND',
-                                                        style:
-                                                            textStyle.copyWith(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold),
-                                                      ),
-                                                      onPressed: () {
-                                                        setState(() {
-                                                          ApiService()
-                                                              .addReview(
-                                                                  state.result
-                                                                      .id,
-                                                                  myController1
-                                                                      .text,
-                                                                  myController2
-                                                                      .text);
-                                                          Navigator.pop(
-                                                              context);
-                                                        });
-                                                      },
-                                                    )
-                                                  ],
-                                                ),
+                                                    )),
+                                                SizedBox(height: 16),
+                                                RaisedButton(
+                                                  color: Colors.greenAccent,
+                                                  child: Text(
+                                                    'SEND',
+                                                    style: textStyle.copyWith(
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                  onPressed: () {
+                                                    setState(() {
+                                                      if (_formKey.currentState
+                                                          .validate()) {
+                                                        ApiService().addReview(
+                                                            state.result.id,
+                                                            myController1.text
+                                                                    .isNotEmpty
+                                                                ? myController1
+                                                                    .text
+                                                                : 'Anonim',
+                                                            myController2.text);
+
+                                                        Navigator.pop(context);
+                                                      }
+                                                    });
+                                                  },
+                                                )
                                               ],
-                                            ))),
-                                  ));
+                                            ),
+                                          ],
+                                        ),
+                                      ]));
                             },
                           )
                         ],

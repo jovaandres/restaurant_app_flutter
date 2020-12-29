@@ -7,7 +7,11 @@ import 'package:restaurant_app_flutter/ui/detail_page.dart';
 import 'package:restaurant_app_flutter/ui/restaurant_list.dart';
 import 'package:restaurant_app_flutter/widget/search_page.dart';
 
-void main() => runApp(MyApp());
+ApiService apiService = ApiService();
+
+void main() {
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
@@ -24,14 +28,14 @@ class MyApp extends StatelessWidget {
         RestaurantDetail.routeName: (context) =>
             ChangeNotifierProvider<DetailProvider>(
               create: (_) => DetailProvider(
-                  apiService: ApiService(),
+                  apiService: apiService,
                   id: ModalRoute.of(context).settings.arguments),
               child: RestaurantDetail(
                   restaurantsId: ModalRoute.of(context).settings.arguments),
             ),
         SearchPage.routeName: (context) =>
             ChangeNotifierProvider<SearchProvider>(
-                create: (_) => SearchProvider(apiService: ApiService()),
+                create: (_) => SearchProvider(apiService: apiService),
                 child: SearchPage())
       },
     );
