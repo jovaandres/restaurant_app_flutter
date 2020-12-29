@@ -4,6 +4,7 @@ import 'package:restaurant_app_flutter/common/constant.dart';
 import 'package:restaurant_app_flutter/provider/search_provider.dart';
 import 'package:restaurant_app_flutter/widget/build_restaurant_item.dart';
 import 'package:restaurant_app_flutter/widget/empty_list.dart';
+import 'package:restaurant_app_flutter/widget/no_connection_widget.dart';
 import 'package:rxdart/rxdart.dart';
 
 var textQuery = BehaviorSubject<String>();
@@ -86,7 +87,7 @@ class _SearchPageState extends State<SearchPage>
                           return EmptyWidget(
                               message: 'Coba mencari dengan kata kunci lain');
                         } else if (state.state == ResultState.Error) {
-                          return Center(child: Text(state.message));
+                          return NoConnectionWidget();
                         } else {
                           return Center(child: Text(''));
                         }
