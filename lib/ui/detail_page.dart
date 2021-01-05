@@ -35,20 +35,24 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: SingleChildScrollView(
-      child: Consumer<DetailProvider>(builder: (context, state, _) {
-        if (state.state == ResultState.Loading) {
-          return Container(
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: Consumer<DetailProvider>(builder: (context, state, _) {
+          if (state.state == ResultState.Loading) {
+            return Container(
               height: MediaQuery.of(context).size.height,
-              child: Center(child: CircularProgressIndicator()));
-        } else if (state.state == ResultState.HasData) {
-          return SafeArea(
-              child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Stack(
-                children: [
-                  Hero(
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+          } else if (state.state == ResultState.HasData) {
+            return SafeArea(
+                child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Stack(
+                  children: [
+                    Hero(
                       tag: state.result.id,
                       child: Image.network(
                         mediumImage + state.result.pictureId,
@@ -68,61 +72,75 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
                         errorBuilder: (BuildContext context, Object exception,
                             StackTrace stackTrace) {
                           return Center(
-                              child: Image.asset('assets/image_error.png',
-                                  width: 60, height: 60));
+                            child: Image.asset(
+                              'assets/image_error.png',
+                              width: 60,
+                              height: 60,
+                            ),
+                          );
                         },
-                      )),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      IconButton(
-                        icon: Icon(Icons.arrow_back),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                      )
-                    ],
-                  ),
-                ],
-              ),
-              Container(
-                padding: const EdgeInsets.all(12.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      state.result.name,
-                      style: textStyle.copyWith(fontSize: 24),
-                      textAlign: TextAlign.left,
+                      ),
                     ),
-                    SizedBox(height: 8),
                     Row(
-                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Icon(Icons.location_pin, size: 20),
-                        Text(
-                          state.result.city,
-                          style: textStyle.copyWith(fontSize: 16),
-                          textAlign: TextAlign.start,
+                        IconButton(
+                          icon: Icon(Icons.arrow_back),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
                         )
                       ],
                     ),
-                    Text(
-                      state.result.address,
-                      style: textStyle.copyWith(fontSize: 14),
-                      textAlign: TextAlign.start,
-                    ),
-                    SizedBox(height: 16),
-                    Text(
-                      'Description',
-                      style: textStyle.copyWith(fontSize: 20),
-                    ),
-                    SizedBox(height: 4),
-                    Text(state.result.description,
-                        style: textStyle, textAlign: TextAlign.justify),
-                    SizedBox(height: 16),
-                    Text('Category', style: textStyle.copyWith(fontSize: 16)),
-                    Container(
+                  ],
+                ),
+                Container(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        state.result.name,
+                        style: textStyle.copyWith(fontSize: 24),
+                        textAlign: TextAlign.left,
+                      ),
+                      SizedBox(height: 8),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.location_pin,
+                            size: 20,
+                          ),
+                          Text(
+                            state.result.city,
+                            style: textStyle.copyWith(fontSize: 16),
+                            textAlign: TextAlign.start,
+                          )
+                        ],
+                      ),
+                      Text(
+                        state.result.address,
+                        style: textStyle.copyWith(fontSize: 14),
+                        textAlign: TextAlign.start,
+                      ),
+                      SizedBox(height: 16),
+                      Text(
+                        'Description',
+                        style: textStyle.copyWith(fontSize: 20),
+                      ),
+                      SizedBox(height: 4),
+                      Text(
+                        state.result.description,
+                        style: textStyle,
+                        textAlign: TextAlign.justify,
+                      ),
+                      SizedBox(height: 16),
+                      Text(
+                        'Category',
+                        style: textStyle.copyWith(fontSize: 16),
+                      ),
+                      Container(
                         height: 50,
                         child: ListView(
                           scrollDirection: Axis.horizontal,
@@ -134,199 +152,237 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
                                     borderRadius: BorderRadius.circular(8),
                                     color: Colors.lightBlue),
                                 child: Padding(
-                                    padding: const EdgeInsets.all(6),
-                                    child: Text(
-                                      category.name,
-                                      style: textStyle.copyWith(fontSize: 14),
-                                    )),
+                                  padding: const EdgeInsets.all(6),
+                                  child: Text(
+                                    category.name,
+                                    style: textStyle.copyWith(fontSize: 14),
+                                  ),
+                                ),
                               ),
                             );
                           }).toList(),
-                        )),
-                    SizedBox(height: 16),
-                    Center(
-                        child: Text('Menus',
-                            style: textStyle.copyWith(fontSize: 20))),
-                    Divider(color: Colors.black),
-                    Container(
-                      height: MediaQuery.of(context).size.height * 0.15,
-                      child: ListView(
-                        scrollDirection: Axis.horizontal,
-                        children: state.result.menus.foods.map((name) {
-                          return Padding(
-                            padding: const EdgeInsets.all(8),
-                            child: Container(
+                        ),
+                      ),
+                      SizedBox(height: 16),
+                      Center(
+                        child: Text(
+                          'Menus',
+                          style: textStyle.copyWith(fontSize: 20),
+                        ),
+                      ),
+                      Divider(color: Colors.black),
+                      Container(
+                        height: MediaQuery.of(context).size.height * 0.15,
+                        child: ListView(
+                          scrollDirection: Axis.horizontal,
+                          children: state.result.menus.foods.map((name) {
+                            return Padding(
+                              padding: const EdgeInsets.all(8),
+                              child: Container(
                                 decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                        alignment: Alignment.bottomRight,
-                                        image: AssetImage('assets/foods.png')),
-                                    color: Colors.orange.withOpacity(0.2),
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(8))),
+                                  image: DecorationImage(
+                                    alignment: Alignment.bottomRight,
+                                    image: AssetImage('assets/foods.png'),
+                                  ),
+                                  color: Colors.orange.withOpacity(0.2),
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(8),
+                                  ),
+                                ),
                                 width: 160,
                                 child: Padding(
-                                    padding: const EdgeInsets.all(8),
-                                    child: Text(name.name,
-                                        style: textStyle.copyWith(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold)))),
-                          );
-                        }).toList(),
+                                  padding: const EdgeInsets.all(8),
+                                  child: Text(
+                                    name.name,
+                                    style: textStyle.copyWith(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          }).toList(),
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 8),
-                    Container(
-                      height: MediaQuery.of(context).size.height * 0.15,
-                      child: ListView(
-                        scrollDirection: Axis.horizontal,
-                        children: state.result.menus.drinks.map((name) {
-                          return Padding(
-                            padding: const EdgeInsets.all(8),
-                            child: Container(
+                      SizedBox(height: 8),
+                      Container(
+                        height: MediaQuery.of(context).size.height * 0.15,
+                        child: ListView(
+                          scrollDirection: Axis.horizontal,
+                          children: state.result.menus.drinks.map((name) {
+                            return Padding(
+                              padding: const EdgeInsets.all(8),
+                              child: Container(
                                 decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                        alignment: Alignment.bottomRight,
-                                        image: AssetImage('assets/drinks.png')),
-                                    color: Colors.greenAccent.withOpacity(0.2),
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(8))),
+                                  image: DecorationImage(
+                                    alignment: Alignment.bottomRight,
+                                    image: AssetImage('assets/drinks.png'),
+                                  ),
+                                  color: Colors.greenAccent.withOpacity(0.2),
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(8),
+                                  ),
+                                ),
                                 width: 160,
                                 child: Padding(
-                                    padding: const EdgeInsets.all(8),
-                                    child: Text(name.name,
-                                        style: textStyle.copyWith(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold)))),
-                          );
-                        }).toList(),
+                                  padding: const EdgeInsets.all(8),
+                                  child: Text(
+                                    name.name,
+                                    style: textStyle.copyWith(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          }).toList(),
+                        ),
                       ),
-                    ),
-                    Divider(color: Colors.black),
-                    SizedBox(height: 16),
-                    Center(
-                      child: Column(
-                        children: [
-                          Text(
-                            'Feedback',
-                            style: textStyle.copyWith(fontSize: 20),
-                          ),
-                          SizedBox(height: 8),
-                          RatingBar.builder(
-                            initialRating: 0,
-                            itemCount: 5,
-                            itemBuilder: (context, index) {
-                              switch (index) {
-                                case 0:
-                                  return Icon(
-                                    Icons.sentiment_very_dissatisfied,
-                                    color: Colors.red,
-                                  );
-                                case 1:
-                                  return Icon(
-                                    Icons.sentiment_dissatisfied,
-                                    color: Colors.deepOrangeAccent,
-                                  );
-                                case 2:
-                                  return Icon(
-                                    Icons.sentiment_neutral,
-                                    color: Colors.amber,
-                                  );
-                                case 3:
-                                  return Icon(
-                                    Icons.sentiment_satisfied,
-                                    color: Colors.lightGreen,
-                                  );
-                                case 4:
-                                  return Icon(
-                                    Icons.sentiment_very_satisfied,
-                                    color: Colors.green,
-                                  );
-                                default:
-                                  return Icon(
-                                    Icons.sentiment_neutral,
-                                    color: Colors.grey,
-                                  );
-                              }
-                            },
-                            onRatingUpdate: (rating) {
-                              showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return Platform.isAndroid
-                                        ? SimpleDialog(
-                                            title: Text('Review Restaurant',
+                      Divider(color: Colors.black),
+                      SizedBox(height: 16),
+                      Center(
+                        child: Column(
+                          children: [
+                            Text(
+                              'Feedback',
+                              style: textStyle.copyWith(fontSize: 20),
+                            ),
+                            SizedBox(height: 8),
+                            RatingBar.builder(
+                              initialRating: 0,
+                              itemCount: 5,
+                              itemBuilder: (context, index) {
+                                switch (index) {
+                                  case 0:
+                                    return Icon(
+                                      Icons.sentiment_very_dissatisfied,
+                                      color: Colors.red,
+                                    );
+                                  case 1:
+                                    return Icon(
+                                      Icons.sentiment_dissatisfied,
+                                      color: Colors.deepOrangeAccent,
+                                    );
+                                  case 2:
+                                    return Icon(
+                                      Icons.sentiment_neutral,
+                                      color: Colors.amber,
+                                    );
+                                  case 3:
+                                    return Icon(
+                                      Icons.sentiment_satisfied,
+                                      color: Colors.lightGreen,
+                                    );
+                                  case 4:
+                                    return Icon(
+                                      Icons.sentiment_very_satisfied,
+                                      color: Colors.green,
+                                    );
+                                  default:
+                                    return Icon(
+                                      Icons.sentiment_neutral,
+                                      color: Colors.grey,
+                                    );
+                                }
+                              },
+                              onRatingUpdate: (rating) {
+                                showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return Platform.isAndroid
+                                          ? SimpleDialog(
+                                              title: Text(
+                                                'Review Restaurant',
                                                 style: textStyle.copyWith(
-                                                    fontSize: 20),
-                                                textAlign: TextAlign.center),
-                                            contentPadding:
-                                                const EdgeInsets.all(16),
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(24)),
-                                            children: [
-                                              Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  TextField(
-                                                    controller: myController1,
-                                                    decoration: InputDecoration(
-                                                        hintText: 'Nama Kamu'),
-                                                  ),
-                                                  Form(
-                                                      key: _formKey,
-                                                      child: TextFormField(
-                                                        validator: (value) {
-                                                          if (value.isEmpty) {
-                                                            return 'Tulis Review Sedikitnya Satu Kata';
-                                                          }
-                                                          return null;
-                                                        },
-                                                        controller:
-                                                            myController2,
-                                                        decoration: InputDecoration(
-                                                            hintText:
-                                                                'Tulis Review'),
-                                                      )),
-                                                  SizedBox(height: 16),
-                                                  RaisedButton(
-                                                    color: Colors.greenAccent,
-                                                    child: Text(
-                                                      'SEND',
-                                                      style: textStyle.copyWith(
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                    onPressed: () {
-                                                      if (_formKey.currentState
-                                                          .validate()) {
-                                                        ApiService().addReview(
-                                                            state.result.id,
-                                                            myController1.text
-                                                                    .isNotEmpty
-                                                                ? myController1
-                                                                    .text
-                                                                : 'Anonim',
-                                                            myController2.text);
-                                                        Navigator.pop(context);
-                                                      }
-                                                    },
-                                                  )
-                                                ],
+                                                  fontSize: 20,
+                                                ),
+                                                textAlign: TextAlign.center,
                                               ),
-                                            ],
-                                          )
-                                        : CupertinoAlertDialog(
-                                            title: Text('Review Restaurant',
+                                              contentPadding:
+                                                  const EdgeInsets.all(16),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(24),
+                                              ),
+                                              children: [
+                                                Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    TextField(
+                                                      controller: myController1,
+                                                      decoration:
+                                                          InputDecoration(
+                                                        hintText: 'Nama Kamu',
+                                                      ),
+                                                    ),
+                                                    Form(
+                                                        key: _formKey,
+                                                        child: TextFormField(
+                                                          validator: (value) {
+                                                            if (value.isEmpty) {
+                                                              return 'Tulis Review Sedikitnya Satu Kata';
+                                                            }
+                                                            return null;
+                                                          },
+                                                          controller:
+                                                              myController2,
+                                                          decoration:
+                                                              InputDecoration(
+                                                            hintText:
+                                                                'Tulis Review',
+                                                          ),
+                                                        )),
+                                                    SizedBox(height: 16),
+                                                    RaisedButton(
+                                                      color: Colors.greenAccent,
+                                                      child: Text(
+                                                        'SEND',
+                                                        style:
+                                                            textStyle.copyWith(
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                      ),
+                                                      onPressed: () {
+                                                        if (_formKey
+                                                            .currentState
+                                                            .validate()) {
+                                                          ApiService().addReview(
+                                                              state.result.id,
+                                                              myController1.text
+                                                                      .isNotEmpty
+                                                                  ? myController1
+                                                                      .text
+                                                                  : 'Anonim',
+                                                              myController2
+                                                                  .text);
+                                                          Navigator.pop(
+                                                              context);
+                                                        }
+                                                      },
+                                                    )
+                                                  ],
+                                                ),
+                                              ],
+                                            )
+                                          : CupertinoAlertDialog(
+                                              title: Text(
+                                                'Review Restaurant',
                                                 style: textStyle.copyWith(
-                                                    fontSize: 20),
-                                                textAlign: TextAlign.center),
-                                            content: Padding(
+                                                  fontSize: 20,
+                                                ),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                              content: Padding(
                                                 padding: const EdgeInsets.only(
-                                                    top: 16),
+                                                  top: 16,
+                                                ),
                                                 child: Column(
                                                   crossAxisAlignment:
                                                       CrossAxisAlignment.center,
@@ -338,7 +394,8 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
                                                       controller: myController1,
                                                       placeholder: 'Nama Kamu',
                                                       style: TextStyle(
-                                                          color: Colors.white),
+                                                        color: Colors.white,
+                                                      ),
                                                     ),
                                                     SizedBox(height: 8),
                                                     CupertinoTextField(
@@ -346,37 +403,43 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
                                                       placeholder:
                                                           'Tulis Review',
                                                       style: TextStyle(
-                                                          color: Colors.white),
+                                                        color: Colors.white,
+                                                      ),
                                                     )
                                                   ],
-                                                )),
-                                            actions: [
-                                              CupertinoDialogAction(
-                                                  child: Text('SEND'),
-                                                  onPressed: () {
-                                                    ApiService().addReview(
-                                                        state.result.id,
-                                                        myController1
-                                                                .text.isNotEmpty
-                                                            ? myController1.text
-                                                            : 'Anonim',
-                                                        myController2.text);
-                                                    Navigator.pop(context);
-                                                  })
-                                            ],
-                                          );
-                                  });
-                            },
-                          )
-                        ],
+                                                ),
+                                              ),
+                                              actions: [
+                                                CupertinoDialogAction(
+                                                    child: Text('SEND'),
+                                                    onPressed: () {
+                                                      ApiService().addReview(
+                                                          state.result.id,
+                                                          myController1.text
+                                                                  .isNotEmpty
+                                                              ? myController1
+                                                                  .text
+                                                              : 'Anonim',
+                                                          myController2.text);
+                                                      Navigator.pop(context);
+                                                    })
+                                              ],
+                                            );
+                                    });
+                              },
+                            )
+                          ],
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 16),
-                    Padding(
+                      SizedBox(height: 16),
+                      Padding(
                         padding: const EdgeInsets.only(left: 16),
-                        child: Text('User Review',
-                            style: textStyle.copyWith(fontSize: 20))),
-                    Container(
+                        child: Text(
+                          'User Review',
+                          style: textStyle.copyWith(fontSize: 20),
+                        ),
+                      ),
+                      Container(
                         height: (state.result.customerReviews.length) >= 5
                             ? 400.0
                             : (state.result.customerReviews.length * 80)
@@ -388,47 +451,52 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
                                 context, state.result.customerReviews[index]);
                           },
                           itemCount: state.result.customerReviews.length,
-                        ))
-                  ],
-                ),
-              )
-            ],
-          ));
-        } else if (state.state == ResultState.NoData) {
-          return EmptyWidget(message: 'Data tidak berhasil ditampilkan');
-        } else if (state.state == ResultState.Error) {
-          return NoConnectionWidget();
-        } else {
-          return Center(child: Text(''));
-        }
-      }),
-    ));
+                        ),
+                      )
+                    ],
+                  ),
+                )
+              ],
+            ));
+          } else if (state.state == ResultState.NoData) {
+            return EmptyWidget(message: 'Data tidak berhasil ditampilkan');
+          } else if (state.state == ResultState.Error) {
+            return NoConnectionWidget();
+          } else {
+            return Center(
+              child: Text(''),
+            );
+          }
+        }),
+      ),
+    );
   }
 }
 
 Widget _buildReview(BuildContext context, CustomerReview review) {
   return Padding(
-      padding: const EdgeInsets.all(8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                review.name,
-                style: textStyle,
-              ),
-              SizedBox(width: 4),
-              Text(review.date)
-            ],
-          ),
-          SizedBox(height: 12),
-          Text(
-            review.review,
-            style: textStyle,
-          ),
-          Divider(color: Colors.black)
-        ],
-      ));
+    padding: const EdgeInsets.all(8),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              review.name,
+              style: textStyle,
+            ),
+            SizedBox(width: 4),
+            Text(review.date)
+          ],
+        ),
+        SizedBox(height: 12),
+        Text(
+          review.review,
+          style: textStyle,
+        ),
+        Divider(color: Colors.black)
+      ],
+    ),
+  );
 }

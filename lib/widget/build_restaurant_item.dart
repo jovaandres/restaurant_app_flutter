@@ -13,22 +13,23 @@ Widget buildRestaurantItem(BuildContext context, Restaurants restaurant) {
     child: Container(
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              offset: Offset(-15, -15),
-              blurRadius: 22,
-              color: Colors.cyan.withOpacity(0.22),
-            )
-          ],
-          gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                Color.fromRGBO(72, 85, 99, 1),
-                Color.fromRGBO(41, 50, 60, 1)
-              ]),
-          color: Colors.grey.withOpacity(1),
-          borderRadius: BorderRadius.all(Radius.circular(0))),
+        boxShadow: [
+          BoxShadow(
+            offset: Offset(-15, -15),
+            blurRadius: 22,
+            color: Colors.cyan.withOpacity(0.22),
+          )
+        ],
+        gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Color.fromRGBO(72, 85, 99, 1),
+              Color.fromRGBO(41, 50, 60, 1)
+            ]),
+        color: Colors.grey.withOpacity(1),
+        borderRadius: BorderRadius.all(Radius.circular(0)),
+      ),
       margin: const EdgeInsets.all(4.0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -36,72 +37,82 @@ Widget buildRestaurantItem(BuildContext context, Restaurants restaurant) {
           Expanded(
             flex: 2,
             child: ClipRRect(
-                borderRadius: BorderRadius.circular(8.0),
-                child: Hero(
-                  tag: restaurant.id,
-                  child: Image.network(
-                    smallImage + restaurant.pictureId,
-                    width: 125,
-                    loadingBuilder: (BuildContext context, Widget child,
-                        ImageChunkEvent loading) {
-                      if (loading == null) return child;
-                      return Center(
-                        heightFactor: 2,
-                        child: CircularProgressIndicator(
-                          value: loading.expectedTotalBytes != null
-                              ? loading.cumulativeBytesLoaded /
-                                  loading.expectedTotalBytes
-                              : null,
-                        ),
-                      );
-                    },
-                    errorBuilder: (BuildContext context, Object exception,
-                        StackTrace stackTrace) {
-                      return Center(
-                          child: Image.asset('assets/image_error.png',
-                              width: 60, height: 60));
-                    },
-                  ),
-                )),
+              borderRadius: BorderRadius.circular(8.0),
+              child: Hero(
+                tag: restaurant.id,
+                child: Image.network(
+                  smallImage + restaurant.pictureId,
+                  width: 125,
+                  loadingBuilder: (BuildContext context, Widget child,
+                      ImageChunkEvent loading) {
+                    if (loading == null) return child;
+                    return Center(
+                      heightFactor: 2,
+                      child: CircularProgressIndicator(
+                        value: loading.expectedTotalBytes != null
+                            ? loading.cumulativeBytesLoaded /
+                                loading.expectedTotalBytes
+                            : null,
+                      ),
+                    );
+                  },
+                  errorBuilder: (BuildContext context, Object exception,
+                      StackTrace stackTrace) {
+                    return Center(
+                      child: Image.asset(
+                        'assets/image_error.png',
+                        width: 60,
+                        height: 60,
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
           ),
           Expanded(
-              flex: 3,
-              child: Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
+            flex: 3,
+            child: Padding(
+              padding: const EdgeInsets.all(8),
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    restaurant.name,
+                    textAlign: TextAlign.start,
+                    style: textStyle.copyWith(fontSize: 18),
+                  ),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
+                      Icon(
+                        Icons.location_pin,
+                        size: 20,
+                      ),
                       Text(
-                        restaurant.name,
+                        restaurant.city,
+                        style: textStyle,
                         textAlign: TextAlign.start,
-                        style: textStyle.copyWith(fontSize: 18),
-                      ),
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(Icons.location_pin, size: 20),
-                          Text(
-                            restaurant.city,
-                            style: textStyle,
-                            textAlign: TextAlign.start,
-                          )
-                        ],
-                      ),
-                      SizedBox(height: 12),
-                      RatingBarIndicator(
-                        rating: restaurant.rating.toDouble(),
-                        direction: Axis.horizontal,
-                        itemCount: 5,
-                        itemBuilder: (context, index) => Icon(
-                          Icons.star,
-                          color: Colors.yellow,
-                        ),
-                        itemSize: 16,
                       )
                     ],
-                  )))
+                  ),
+                  SizedBox(height: 12),
+                  RatingBarIndicator(
+                    rating: restaurant.rating.toDouble(),
+                    direction: Axis.horizontal,
+                    itemCount: 5,
+                    itemBuilder: (context, index) => Icon(
+                      Icons.star,
+                      color: Colors.yellow,
+                    ),
+                    itemSize: 16,
+                  )
+                ],
+              ),
+            ),
+          )
         ],
       ),
     ),

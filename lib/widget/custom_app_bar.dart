@@ -31,7 +31,9 @@ class CustomAppBar extends PreferredSize {
                 Text(
                   'Recommendation restaurant for you!',
                   style: textStyle.copyWith(
-                      fontSize: 14, fontWeight: FontWeight.bold),
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                  ),
                 )
               ],
             ),

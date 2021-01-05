@@ -35,8 +35,9 @@ class MyApp extends StatelessWidget {
             ),
         SearchPage.routeName: (context) =>
             ChangeNotifierProvider<SearchProvider>(
-                create: (_) => SearchProvider(apiService: apiService),
-                child: SearchPage())
+              create: (_) => SearchProvider(apiService: apiService),
+              child: SearchPage(),
+            )
       },
     );
   }

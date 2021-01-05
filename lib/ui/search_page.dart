@@ -46,54 +46,61 @@ class _SearchPageState extends State<SearchPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text('Search Restaurant')),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Padding(
-                padding: const EdgeInsets.all(8),
-                child: Container(
-                  height: 40,
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(16)),
-                  child: TextField(
-                      style: TextStyle(color: Colors.black),
-                      decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText: 'Search by name or menu',
-                          hintStyle: TextStyle(color: Colors.grey)),
-                      controller: myController),
-                )),
-            Expanded(
-                flex: 9,
-                child: Padding(
-                    padding: const EdgeInsets.all(8),
-                    child: Consumer<SearchProvider>(
-                      builder: (context, state, _) {
-                        if (state.state == ResultState.Loading) {
-                          return Center(child: CircularProgressIndicator());
-                        } else if (state.state == ResultState.HasData) {
-                          return ListView.builder(
-                              shrinkWrap: true,
-                              padding: const EdgeInsets.all(8.0),
-                              itemCount: state.result.restaurants.length,
-                              itemBuilder: (context, index) {
-                                return buildRestaurantItem(
-                                    context, state.result.restaurants[index]);
-                              });
-                        } else if (state.state == ResultState.NoData) {
-                          return EmptyWidget(
-                              message: 'Coba mencari dengan kata kunci lain');
-                        } else if (state.state == ResultState.Error) {
-                          return NoConnectionWidget();
-                        } else {
-                          return Center(child: Text(''));
-                        }
-                      },
-                    )))
-          ],
-        ));
+      appBar: AppBar(title: Text('Search Restaurant')),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: Container(
+              height: 40,
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              decoration: BoxDecoration(
+                  color: Colors.white, borderRadius: BorderRadius.circular(16)),
+              child: TextField(
+                  style: TextStyle(color: Colors.black),
+                  decoration: InputDecoration(
+                      border: InputBorder.none,
+                      hintText: 'Search by name or menu',
+                      hintStyle: TextStyle(color: Colors.grey)),
+                  controller: myController),
+            ),
+          ),
+          Expanded(
+            flex: 9,
+            child: Padding(
+              padding: const EdgeInsets.all(8),
+              child: Consumer<SearchProvider>(
+                builder: (context, state, _) {
+                  if (state.state == ResultState.Loading) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else if (state.state == ResultState.HasData) {
+                    return ListView.builder(
+                        shrinkWrap: true,
+                        padding: const EdgeInsets.all(8.0),
+                        itemCount: state.result.restaurants.length,
+                        itemBuilder: (context, index) {
+                          return buildRestaurantItem(
+                              context, state.result.restaurants[index]);
+                        });
+                  } else if (state.state == ResultState.NoData) {
+                    return EmptyWidget(
+                        message: 'Coba mencari dengan kata kunci lain');
+                  } else if (state.state == ResultState.Error) {
+                    return NoConnectionWidget();
+                  } else {
+                    return Center(
+                      child: Text(''),
+                    );
+                  }
+                },
+              ),
+            ),
+          )
+        ],
+      ),
+    );
   }
 }

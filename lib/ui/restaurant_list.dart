@@ -19,12 +19,15 @@ class MainPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: CustomAppBar(
+      appBar: AppBar(
+        title: CustomAppBar(
           onPressed: () {
             Navigator.pushNamed(context, SearchPage.routeName);
           },
-        )),
-        body: buildList);
+        ),
+      ),
+      body: buildList,
+    );
   }
 }
 
@@ -34,29 +37,34 @@ Widget _buildList() {
     mainAxisAlignment: MainAxisAlignment.start,
     children: <Widget>[
       Expanded(
-          flex: 9,
-          child: Consumer<RestaurantProvider>(
-            builder: (context, state, _) {
-              if (state.state == ResultState.Loading) {
-                return Center(child: CircularProgressIndicator());
-              } else if (state.state == ResultState.HasData) {
-                return ListView.builder(
-                    shrinkWrap: true,
-                    padding: const EdgeInsets.all(8.0),
-                    itemCount: state.result.restaurants.length,
-                    itemBuilder: (context, index) {
-                      return buildRestaurantItem(
-                          context, state.result.restaurants[index]);
-                    });
-              } else if (state.state == ResultState.NoData) {
-                return EmptyWidget(message: 'Data tidak berhasil ditampilkan');
-              } else if (state.state == ResultState.Error) {
-                return NoConnectionWidget();
-              } else {
-                return Center(child: Text(''));
-              }
-            },
-          ))
+        flex: 9,
+        child: Consumer<RestaurantProvider>(
+          builder: (context, state, _) {
+            if (state.state == ResultState.Loading) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            } else if (state.state == ResultState.HasData) {
+              return ListView.builder(
+                  shrinkWrap: true,
+                  padding: const EdgeInsets.all(8.0),
+                  itemCount: state.result.restaurants.length,
+                  itemBuilder: (context, index) {
+                    return buildRestaurantItem(
+                        context, state.result.restaurants[index]);
+                  });
+            } else if (state.state == ResultState.NoData) {
+              return EmptyWidget(message: 'Data tidak berhasil ditampilkan');
+            } else if (state.state == ResultState.Error) {
+              return NoConnectionWidget();
+            } else {
+              return Center(
+                child: Text(''),
+              );
+            }
+          },
+        ),
+      )
     ],
   );
 }
