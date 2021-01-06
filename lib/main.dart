@@ -1,15 +1,45 @@
+import 'dart:io';
+
+import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
+import 'package:restaurant_app_flutter/common/navigation.dart';
 import 'package:restaurant_app_flutter/data/api/api_service.dart';
+import 'package:restaurant_app_flutter/data/db/database_helper.dart';
+import 'package:restaurant_app_flutter/data/preferences/preferences_helper.dart';
+import 'package:restaurant_app_flutter/provider/database_provider.dart';
 import 'package:restaurant_app_flutter/provider/detail_provider.dart';
+import 'package:restaurant_app_flutter/provider/preferences_provider.dart';
+import 'package:restaurant_app_flutter/provider/scheduling_provider.dart';
 import 'package:restaurant_app_flutter/provider/search_provider.dart';
 import 'package:restaurant_app_flutter/ui/detail_page.dart';
+import 'package:restaurant_app_flutter/ui/favorites_page.dart';
+import 'package:restaurant_app_flutter/ui/home_page.dart';
 import 'package:restaurant_app_flutter/ui/restaurant_list.dart';
 import 'package:restaurant_app_flutter/ui/search_page.dart';
+import 'package:restaurant_app_flutter/ui/setting_page.dart';
+import 'package:restaurant_app_flutter/utils/background_service.dart';
+import 'package:restaurant_app_flutter/utils/notification_helper.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-ApiService apiService = ApiService();
+final ApiService apiService = ApiService();
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  final NotificationHelper _notificationHelper = NotificationHelper();
+  final BackgroundService _service = BackgroundService();
+
+  _service.initializeIsolate();
+
+  if (Platform.isAndroid) {
+    await AndroidAlarmManager.initialize();
+  }
+  await _notificationHelper.initNotification(flutterLocalNotificationsPlugin);
+
   runApp(MyApp());
 }
 
@@ -17,25 +47,53 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      navigatorKey: navigatorKey,
       title: 'Restaurant',
       theme: ThemeData(
         brightness: Brightness.dark,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MainPage(),
+      home: HomePage(),
       routes: {
+        HomePage.routeName: (context) => HomePage(),
         MainPage.routeName: (context) => MainPage(),
-        RestaurantDetail.routeName: (context) =>
-            ChangeNotifierProvider<DetailProvider>(
-              create: (_) => DetailProvider(
-                  apiService: apiService,
-                  id: ModalRoute.of(context).settings.arguments),
+        RestaurantDetail.routeName: (context) => MultiProvider(
+              providers: [
+                ChangeNotifierProvider<DetailProvider>(
+                  create: (_) => DetailProvider(
+                      apiService: apiService,
+                      id: ModalRoute.of(context).settings.arguments),
+                ),
+                ChangeNotifierProvider<DatabaseProvider>(
+                  create: (_) =>
+                      DatabaseProvider(databaseHelper: DatabaseHelper()),
+                )
+              ],
               child: RestaurantDetail(
-                  restaurantsId: ModalRoute.of(context).settings.arguments),
+                restaurantsId: ModalRoute.of(context).settings.arguments,
+              ),
             ),
         SearchPage.routeName: (context) =>
             ChangeNotifierProvider<SearchProvider>(
               create: (_) => SearchProvider(apiService: apiService),
+              child: SearchPage(),
+            ),
+        FavoritePage.routeName: (context) =>
+            ChangeNotifierProvider<DatabaseProvider>(
+              create: (_) => DatabaseProvider(databaseHelper: DatabaseHelper()),
+              child: FavoritePage(),
+            ),
+        SettingPage.routeName: (context) => MultiProvider(
+              providers: [
+                ChangeNotifierProvider<SchedulingProvider>(
+                  create: (_) => SchedulingProvider(),
+                ),
+                ChangeNotifierProvider(
+                  create: (_) => PreferencesProvider(
+                      preferencesHelper: PreferencesHelper(
+                          sharedPreferences: SharedPreferences.getInstance())),
+                )
+              ],
               child: SearchPage(),
             )
       },

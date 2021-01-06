@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:restaurant_app_flutter/common/constant.dart';
 import 'package:restaurant_app_flutter/provider/restaurant_provider.dart';
 import 'package:restaurant_app_flutter/ui/search_page.dart';
+import 'package:restaurant_app_flutter/utils/result_state.dart';
 import 'package:restaurant_app_flutter/widget/build_restaurant_item.dart';
 import 'package:restaurant_app_flutter/main.dart';
 import 'package:restaurant_app_flutter/widget/custom_app_bar.dart';

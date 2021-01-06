@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:restaurant_app_flutter/common/constant.dart';
 import 'package:restaurant_app_flutter/data/api/api_service.dart';
 import 'package:restaurant_app_flutter/data/model/restaurant.dart';
+import 'package:restaurant_app_flutter/utils/result_state.dart';
 
 class SearchProvider extends ChangeNotifier {
   final ApiService apiService;
