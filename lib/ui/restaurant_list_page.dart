@@ -1,39 +1,92 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:restaurant_app_flutter/common/constant.dart';
 import 'package:restaurant_app_flutter/common/navigation.dart';
 import 'package:restaurant_app_flutter/provider/restaurant_provider.dart';
 import 'package:restaurant_app_flutter/ui/search_page.dart';
 import 'package:restaurant_app_flutter/utils/result_state.dart';
 import 'package:restaurant_app_flutter/widget/build_restaurant_item.dart';
-import 'package:restaurant_app_flutter/widget/custom_app_bar.dart';
 import 'package:restaurant_app_flutter/widget/empty_list.dart';
 import 'package:restaurant_app_flutter/widget/no_connection_widget.dart';
+import 'package:restaurant_app_flutter/widget/platform_widget.dart';
 
-class MainPage extends StatelessWidget {
+class RestaurantListPage extends StatelessWidget {
   static const routeName = '/restaurant_list';
+  static const title = 'Restaurant';
 
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildAndroid(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: CustomAppBar(
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              title,
+              style: textStyle.copyWith(fontSize: 24),
+            ),
+            Text(
+              'Recommendation restaurant for you!',
+              style: textStyle.copyWith(
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+              ),
+            )
+          ],
+        ),
+        bottom: PreferredSize(
+          preferredSize: Size(0, 8),
+          child: SizedBox(
+            height: 8,
+          ),
+        ),
+        actions: [
+          IconButton(
+            icon: Icon(CupertinoIcons.search),
+            onPressed: () {
+              Navigation.intent(SearchPage.routeName);
+            },
+          )
+        ],
+      ),
+      body: _buildList(),
+    );
+  }
+
+  Widget _buildIOS(BuildContext context) {
+    return CupertinoPageScaffold(
+      navigationBar: CupertinoNavigationBar(
+        middle: Text(
+          title,
+          style: textStyle.copyWith(fontSize: 18),
+        ),
+        trailing: IconButton(
+          icon: Icon(CupertinoIcons.search),
           onPressed: () {
             Navigation.intent(SearchPage.routeName);
           },
         ),
       ),
-      body: _buildList(),
+      child: SafeArea(
+        child: _buildList(),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return PlatformWidget(
+      androidBuilder: _buildAndroid,
+      iOSBuilder: _buildIOS,
     );
   }
 }
 
 Widget _buildList() {
   return Column(
-    mainAxisSize: MainAxisSize.max,
     mainAxisAlignment: MainAxisAlignment.start,
-    children: <Widget>[
+    children: [
       Expanded(
-        flex: 9,
         child: Consumer<RestaurantProvider>(
           builder: (context, state, _) {
             if (state.state == ResultState.Loading) {

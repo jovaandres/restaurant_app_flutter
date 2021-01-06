@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:restaurant_app_flutter/ui/detail_page.dart';
 import 'package:restaurant_app_flutter/ui/favorites_page.dart';
-import 'package:restaurant_app_flutter/ui/restaurant_list.dart';
+import 'package:restaurant_app_flutter/ui/restaurant_list_page.dart';
 import 'package:restaurant_app_flutter/ui/setting_page.dart';
 import 'package:restaurant_app_flutter/utils/background_service.dart';
 import 'package:restaurant_app_flutter/utils/notification_helper.dart';
@@ -24,22 +24,19 @@ class _HomePageState extends State<HomePage> {
   final BackgroundService _service = BackgroundService();
 
   List<Widget> _listWidget = [
-    MainPage(),
+    RestaurantListPage(),
     FavoritePage(),
     SettingPage(),
   ];
 
   List<BottomNavigationBarItem> _bottomBarItem = [
     BottomNavigationBarItem(
-        icon: Icon(Platform.isIOS ? CupertinoIcons.news : Icons.public),
-        label: 'Restaurant'),
+        icon: Icon(CupertinoIcons.home), label: RestaurantListPage.title),
     BottomNavigationBarItem(
-        icon: Icon(Platform.isIOS ? CupertinoIcons.heart : Icons.favorite,
-            color: Colors.pinkAccent),
-        label: 'Favorite'),
+        icon: Icon(CupertinoIcons.heart_fill), label: 'Favorite'),
     BottomNavigationBarItem(
         icon: Icon(Platform.isIOS ? CupertinoIcons.settings : Icons.settings),
-        label: 'Setting')
+        label: SettingPage.title)
   ];
 
   void _onBotomNavTapped(int index) {

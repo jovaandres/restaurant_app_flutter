@@ -96,7 +96,10 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           IconButton(
-                            icon: Icon(Icons.arrow_back),
+                            icon: Icon(
+                              CupertinoIcons.arrow_left,
+                              size: 26,
+                            ),
                             onPressed: () {
                               Navigation.back();
                             },
@@ -110,8 +113,8 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
                                   return IconButton(
                                     icon: Icon(
                                       isFavorite
-                                          ? Icons.favorite
-                                          : Icons.favorite_border,
+                                          ? CupertinoIcons.heart_fill
+                                          : CupertinoIcons.heart,
                                       color: Colors.pinkAccent,
                                     ),
                                     onPressed: () async {
@@ -151,7 +154,7 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Icon(
-                              Icons.location_pin,
+                              CupertinoIcons.location_solid,
                               size: 20,
                             ),
                             Text(

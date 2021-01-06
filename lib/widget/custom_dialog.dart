@@ -4,15 +4,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:restaurant_app_flutter/common/navigation.dart';
 
-customDialog(BuildContext context) {
+customDialog(BuildContext context, String title, String content) {
   if (Platform.isIOS) {
     showCupertinoDialog(
       context: context,
       barrierDismissible: true,
       builder: (context) {
         return CupertinoAlertDialog(
-          title: Text(''),
-          content: Text(''),
+          title: Text(title),
+          content: Text(content),
           actions: [
             CupertinoDialogAction(
               child: Text('Ok'),
@@ -29,8 +29,8 @@ customDialog(BuildContext context) {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text(''),
-          content: Text(''),
+          title: Text(title),
+          content: Text(content),
           actions: [
             FlatButton(
               child: Text('Ok'),

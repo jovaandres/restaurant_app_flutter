@@ -1,21 +1,42 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:restaurant_app_flutter/data/db/database_helper.dart';
+import 'package:restaurant_app_flutter/common/constant.dart';
 import 'package:restaurant_app_flutter/provider/database_provider.dart';
 import 'package:restaurant_app_flutter/utils/result_state.dart';
 import 'package:restaurant_app_flutter/widget/build_restaurant_item.dart';
 import 'package:restaurant_app_flutter/widget/empty_list.dart';
+import 'package:restaurant_app_flutter/widget/platform_widget.dart';
 
 class FavoritePage extends StatelessWidget {
   static const routeName = '/favorite_page';
+  static const title = 'Favorite Restaurants';
+
+  Widget _buildAndroid(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(title),
+      ),
+      body: _buildList(),
+    );
+  }
+
+  Widget _buildIOS(BuildContext context) {
+    return CupertinoPageScaffold(
+      navigationBar: CupertinoNavigationBar(
+        middle: Text(title),
+      ),
+      child: SafeArea(
+        child: _buildList(),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Favorite Restaurants'),
-      ),
-      body: _buildList(),
+    return PlatformWidget(
+      androidBuilder: _buildAndroid,
+      iOSBuilder: _buildIOS,
     );
   }
 }
@@ -26,9 +47,9 @@ Widget _buildList() {
     mainAxisAlignment: MainAxisAlignment.start,
     children: [
       Expanded(
-        flex: 9,
         child: Consumer<DatabaseProvider>(
           builder: (context, state, _) {
+            final favorites = state.favorites;
             if (state.state == ResultState.Loading) {
               return Center(
                 child: CircularProgressIndicator(),
@@ -37,9 +58,52 @@ Widget _buildList() {
               return ListView.builder(
                 shrinkWrap: true,
                 padding: const EdgeInsets.all(8),
-                itemCount: state.favorites.length,
+                itemCount: favorites.length,
                 itemBuilder: (context, index) {
-                  return buildRestaurantItem(context, state.favorites[index]);
+                  return Dismissible(
+                    key: Key(favorites[index].id),
+                    child: buildRestaurantItem(context, favorites[index]),
+                    direction: DismissDirection.endToStart,
+                    onDismissed: (direction) {
+                      state.removeFavorite(favorites[index].id);
+                      Scaffold.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            'Deleted from favorite',
+                            style: textStyle.copyWith(color: Colors.white),
+                          ),
+                          backgroundColor: Colors.black45,
+                          action: SnackBarAction(
+                            label: 'UNDO',
+                            textColor: Colors.lightBlueAccent,
+                            onPressed: () {
+                              state.addFavorite(favorites[index]);
+                            },
+                          ),
+                        ),
+                      );
+                    },
+                    background: Container(
+                      alignment: Alignment.centerRight,
+                      padding: const EdgeInsets.all(12),
+                      color: Colors.red,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.delete,
+                            color: Colors.white,
+                            size: 32,
+                          ),
+                          SizedBox(height: 8),
+                          Text(
+                            'DELETE',
+                            style: textStyle.copyWith(fontSize: 16),
+                          )
+                        ],
+                      ),
+                    ),
+                  );
                 },
               );
             } else if (state.state == ResultState.NoData) {

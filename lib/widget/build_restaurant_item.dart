@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:restaurant_app_flutter/common/constant.dart';
@@ -88,7 +89,7 @@ Widget buildRestaurantItem(BuildContext context, Restaurants restaurant) {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Icon(
-                        Icons.location_pin,
+                        CupertinoIcons.location_solid,
                         size: 20,
                       ),
                       Text(
@@ -104,7 +105,7 @@ Widget buildRestaurantItem(BuildContext context, Restaurants restaurant) {
                     direction: Axis.horizontal,
                     itemCount: 5,
                     itemBuilder: (context, index) => Icon(
-                      Icons.star,
+                      CupertinoIcons.star_fill,
                       color: Colors.yellow,
                     ),
                     itemSize: 16,

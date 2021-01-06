@@ -6,13 +6,11 @@ import 'package:restaurant_app_flutter/utils/result_state.dart';
 class SearchProvider extends ChangeNotifier {
   final ApiService apiService;
 
-  SearchProvider({this.apiService}) {
-    fetchSearchedRestaurant();
-  }
+  SearchProvider({this.apiService});
 
   Restaurant _restaurantResult;
   String _message;
-  ResultState _state;
+  ResultState _state = ResultState.NoData;
 
   Restaurant get result => _restaurantResult;
 
@@ -20,7 +18,7 @@ class SearchProvider extends ChangeNotifier {
 
   ResultState get state => _state;
 
-  Future<dynamic> fetchSearchedRestaurant({String query: ""}) async {
+  Future<dynamic> fetchSearchedRestaurant(String query) async {
     try {
       _state = ResultState.Loading;
       notifyListeners();

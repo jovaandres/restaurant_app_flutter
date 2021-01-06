@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:android_alarm_manager/android_alarm_manager.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
@@ -17,7 +18,7 @@ import 'package:restaurant_app_flutter/provider/search_provider.dart';
 import 'package:restaurant_app_flutter/ui/detail_page.dart';
 import 'package:restaurant_app_flutter/ui/favorites_page.dart';
 import 'package:restaurant_app_flutter/ui/home_page.dart';
-import 'package:restaurant_app_flutter/ui/restaurant_list.dart';
+import 'package:restaurant_app_flutter/ui/restaurant_list_page.dart';
 import 'package:restaurant_app_flutter/ui/search_page.dart';
 import 'package:restaurant_app_flutter/ui/setting_page.dart';
 import 'package:restaurant_app_flutter/utils/background_service.dart';
@@ -77,10 +78,18 @@ class MyApp extends StatelessWidget {
           brightness: Brightness.dark,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
+        builder: (context, child) {
+          return CupertinoTheme(
+            data: CupertinoThemeData(brightness: Brightness.dark),
+            child: Material(
+              child: child,
+            ),
+          );
+        },
         home: HomePage(),
         routes: {
           HomePage.routeName: (context) => HomePage(),
-          MainPage.routeName: (context) => MainPage(),
+          RestaurantListPage.routeName: (context) => RestaurantListPage(),
           RestaurantDetail.routeName: (context) => RestaurantDetail(
                 restaurantsId: ModalRoute.of(context).settings.arguments,
               ),
