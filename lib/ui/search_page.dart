@@ -93,6 +93,7 @@ Widget _buildList(TextEditingController myController) {
           ),
           child: TextField(
               style: TextStyle(color: Colors.black),
+              keyboardType: TextInputType.name,
               decoration: InputDecoration(
                   border: InputBorder.none,
                   hintText: 'Search by name or menu',

@@ -86,7 +86,7 @@ class MyApp extends StatelessWidget {
             ),
           );
         },
-        home: HomePage(),
+        initialRoute: HomePage.routeName,
         routes: {
           HomePage.routeName: (context) => HomePage(),
           RestaurantListPage.routeName: (context) => RestaurantListPage(),
