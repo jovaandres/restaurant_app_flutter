@@ -9,18 +9,13 @@ import 'package:restaurant_app_flutter/widget/empty_list.dart';
 class FavoritePage extends StatelessWidget {
   static const routeName = '/favorite_page';
 
-  final Widget buildList = ChangeNotifierProvider<DatabaseProvider>(
-    create: (_) => DatabaseProvider(databaseHelper: DatabaseHelper()),
-    child: _buildList(),
-  );
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Favorite Restaurants'),
       ),
-      body: buildList,
+      body: _buildList(),
     );
   }
 }

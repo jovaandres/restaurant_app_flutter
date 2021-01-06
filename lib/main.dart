@@ -11,6 +11,7 @@ import 'package:restaurant_app_flutter/data/preferences/preferences_helper.dart'
 import 'package:restaurant_app_flutter/provider/database_provider.dart';
 import 'package:restaurant_app_flutter/provider/detail_provider.dart';
 import 'package:restaurant_app_flutter/provider/preferences_provider.dart';
+import 'package:restaurant_app_flutter/provider/restaurant_provider.dart';
 import 'package:restaurant_app_flutter/provider/scheduling_provider.dart';
 import 'package:restaurant_app_flutter/provider/search_provider.dart';
 import 'package:restaurant_app_flutter/ui/detail_page.dart';
@@ -46,57 +47,48 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      navigatorKey: navigatorKey,
-      title: 'Restaurant',
-      theme: ThemeData(
-        brightness: Brightness.dark,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: HomePage(),
-      routes: {
-        HomePage.routeName: (context) => HomePage(),
-        MainPage.routeName: (context) => MainPage(),
-        RestaurantDetail.routeName: (context) => MultiProvider(
-              providers: [
-                ChangeNotifierProvider<DetailProvider>(
-                  create: (_) => DetailProvider(
-                      apiService: apiService,
-                      id: ModalRoute.of(context).settings.arguments),
-                ),
-                ChangeNotifierProvider<DatabaseProvider>(
-                  create: (_) =>
-                      DatabaseProvider(databaseHelper: DatabaseHelper()),
-                )
-              ],
-              child: RestaurantDetail(
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<RestaurantProvider>(
+          create: (_) => RestaurantProvider(apiService: apiService),
+        ),
+        ChangeNotifierProvider<DetailProvider>(
+          create: (_) => DetailProvider(apiService: apiService),
+        ),
+        ChangeNotifierProvider<SearchProvider>(
+          create: (_) => SearchProvider(apiService: apiService),
+        ),
+        ChangeNotifierProvider<DatabaseProvider>(
+          create: (_) => DatabaseProvider(databaseHelper: DatabaseHelper()),
+        ),
+        ChangeNotifierProvider<PreferencesProvider>(
+          create: (_) => PreferencesProvider(
+              preferencesHelper: PreferencesHelper(
+                  sharedPreferences: SharedPreferences.getInstance())),
+        ),
+        ChangeNotifierProvider<SchedulingProvider>(
+          create: (_) => SchedulingProvider(),
+        )
+      ],
+      child: MaterialApp(
+        navigatorKey: navigatorKey,
+        title: 'Restaurant',
+        theme: ThemeData(
+          brightness: Brightness.dark,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+        ),
+        home: HomePage(),
+        routes: {
+          HomePage.routeName: (context) => HomePage(),
+          MainPage.routeName: (context) => MainPage(),
+          RestaurantDetail.routeName: (context) => RestaurantDetail(
                 restaurantsId: ModalRoute.of(context).settings.arguments,
               ),
-            ),
-        SearchPage.routeName: (context) =>
-            ChangeNotifierProvider<SearchProvider>(
-              create: (_) => SearchProvider(apiService: apiService),
-              child: SearchPage(),
-            ),
-        FavoritePage.routeName: (context) =>
-            ChangeNotifierProvider<DatabaseProvider>(
-              create: (_) => DatabaseProvider(databaseHelper: DatabaseHelper()),
-              child: FavoritePage(),
-            ),
-        SettingPage.routeName: (context) => MultiProvider(
-              providers: [
-                ChangeNotifierProvider<SchedulingProvider>(
-                  create: (_) => SchedulingProvider(),
-                ),
-                ChangeNotifierProvider(
-                  create: (_) => PreferencesProvider(
-                      preferencesHelper: PreferencesHelper(
-                          sharedPreferences: SharedPreferences.getInstance())),
-                )
-              ],
-              child: SearchPage(),
-            )
-      },
+          SearchPage.routeName: (context) => SearchPage(),
+          FavoritePage.routeName: (context) => FavoritePage(),
+          SettingPage.routeName: (context) => SettingPage()
+        },
+      ),
     );
   }
 }

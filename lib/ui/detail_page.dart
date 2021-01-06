@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:restaurant_app_flutter/common/constant.dart';
+import 'package:restaurant_app_flutter/common/navigation.dart';
 import 'package:restaurant_app_flutter/data/api/api_service.dart';
 import 'package:restaurant_app_flutter/data/model/restaurant.dart';
 import 'package:restaurant_app_flutter/data/model/restaurant_detail.dart';
@@ -28,6 +29,13 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
   final myController1 = TextEditingController();
   final myController2 = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    super.initState();
+    Provider.of<DetailProvider>(context, listen: false)
+        .fetchRestaurantDetail(widget.restaurantsId);
+  }
 
   @override
   void dispose() {
@@ -90,7 +98,7 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
                           IconButton(
                             icon: Icon(Icons.arrow_back),
                             onPressed: () {
-                              Navigator.pop(context);
+                              Navigation.back();
                             },
                           ),
                           Consumer<DatabaseProvider>(
@@ -108,7 +116,8 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
                                     ),
                                     onPressed: () async {
                                       isFavorite
-                                          ? stateFav.removeFavorite(state.id)
+                                          ? stateFav
+                                              .removeFavorite(state.result.id)
                                           : stateFav.addFavorite(Restaurants(
                                               id: state.result.id,
                                               name: state.result.name,
@@ -400,8 +409,7 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
                                                                     : 'Anonim',
                                                                 myController2
                                                                     .text);
-                                                            Navigator.pop(
-                                                                context);
+                                                            Navigation.back();
                                                           }
                                                         },
                                                       )
@@ -464,7 +472,7 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
                                                                     .text
                                                                 : 'Anonim',
                                                             myController2.text);
-                                                        Navigator.pop(context);
+                                                        Navigation.back();
                                                       })
                                                 ],
                                               );

@@ -5,11 +5,8 @@ import 'package:restaurant_app_flutter/utils/result_state.dart';
 
 class DetailProvider extends ChangeNotifier {
   final ApiService apiService;
-  final String id;
 
-  DetailProvider({@required this.apiService, @required this.id}) {
-    fetchRestaurantDetail();
-  }
+  DetailProvider({@required this.apiService});
 
   DetailRestaurant _restaurantResult;
   String _message;
@@ -21,7 +18,7 @@ class DetailProvider extends ChangeNotifier {
 
   ResultState get state => _state;
 
-  Future<dynamic> fetchRestaurantDetail() async {
+  Future<dynamic> fetchRestaurantDetail(String id) async {
     try {
       _state = ResultState.Loading;
       notifyListeners();

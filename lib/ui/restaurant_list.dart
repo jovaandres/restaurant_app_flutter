@@ -1,20 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:restaurant_app_flutter/common/navigation.dart';
 import 'package:restaurant_app_flutter/provider/restaurant_provider.dart';
 import 'package:restaurant_app_flutter/ui/search_page.dart';
 import 'package:restaurant_app_flutter/utils/result_state.dart';
 import 'package:restaurant_app_flutter/widget/build_restaurant_item.dart';
-import 'package:restaurant_app_flutter/main.dart';
 import 'package:restaurant_app_flutter/widget/custom_app_bar.dart';
 import 'package:restaurant_app_flutter/widget/empty_list.dart';
 import 'package:restaurant_app_flutter/widget/no_connection_widget.dart';
 
 class MainPage extends StatelessWidget {
   static const routeName = '/restaurant_list';
-  final Widget buildList = ChangeNotifierProvider<RestaurantProvider>(
-    create: (_) => RestaurantProvider(apiService: apiService),
-    child: _buildList(),
-  );
 
   @override
   Widget build(BuildContext context) {
@@ -22,11 +18,11 @@ class MainPage extends StatelessWidget {
       appBar: AppBar(
         title: CustomAppBar(
           onPressed: () {
-            Navigator.pushNamed(context, SearchPage.routeName);
+            Navigation.intent(SearchPage.routeName);
           },
         ),
       ),
-      body: buildList,
+      body: _buildList(),
     );
   }
 }

@@ -55,6 +55,7 @@ class _HomePageState extends State<HomePage> {
         currentIndex: _bottomNavIndex,
         items: _bottomBarItem,
         onTap: _onBotomNavTapped,
+        backgroundColor: Colors.black26,
       ),
     );
   }

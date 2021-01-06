@@ -6,7 +6,7 @@ import 'package:restaurant_app_flutter/utils/result_state.dart';
 class RestaurantProvider extends ChangeNotifier {
   final ApiService apiService;
 
-  RestaurantProvider({this.apiService}) {
+  RestaurantProvider({@required this.apiService}) {
     fetchRestaurantList();
   }
 

@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:restaurant_app_flutter/common/constant.dart';
+import 'package:restaurant_app_flutter/common/navigation.dart';
 import 'package:restaurant_app_flutter/data/model/restaurant.dart';
 import 'package:restaurant_app_flutter/ui/detail_page.dart';
 
 Widget buildRestaurantItem(BuildContext context, Restaurants restaurant) {
   return GestureDetector(
     onTap: () {
-      Navigator.pushNamed(context, RestaurantDetail.routeName,
-          arguments: restaurant.id);
+      Navigation.intentWithData(RestaurantDetail.routeName, restaurant.id);
     },
     child: Container(
       padding: const EdgeInsets.all(4),

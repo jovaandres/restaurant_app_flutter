@@ -59,7 +59,8 @@ class NotificationHelper {
         iOS: iOSPlatformChannelSpesifics);
 
     var titleNotification = '<b>Find Restaurant</b>';
-    var titleRestaurant = (restaurant.restaurants..shuffle()).first.name;
+    var remindedRestaurant = (restaurant.restaurants..shuffle()).first;
+    var titleRestaurant = remindedRestaurant.name;
 
     await flutterLocalNotificationsPlugin.show(
         0, titleNotification, titleRestaurant, platformChannelSpesifics,
@@ -70,7 +71,7 @@ class NotificationHelper {
     selectNotificationSubject.stream.listen((String payload) async {
       var data = Restaurant.fromJson(jsonDecode(payload));
       var restaurant = (data.restaurants..shuffle()).first;
-      Navigation.intentWithData(route, restaurant);
+      Navigation.intentWithData(route, restaurant.id);
     });
   }
 }
