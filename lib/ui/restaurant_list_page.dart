@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:provider/provider.dart';
 import 'package:restaurant_app_flutter/common/constant.dart';
 import 'package:restaurant_app_flutter/common/navigation.dart';
@@ -44,9 +45,9 @@ class RestaurantListPage extends StatelessWidget {
           IconButton(
             icon: Icon(CupertinoIcons.search),
             onPressed: () {
-              Navigation.intent(SearchPage.routeName);
+              Navigation.intentRoute(_createRouteToSearch());
             },
-          )
+          ),
         ],
       ),
       body: _buildList(),
@@ -63,7 +64,7 @@ class RestaurantListPage extends StatelessWidget {
         trailing: IconButton(
           icon: Icon(CupertinoIcons.search),
           onPressed: () {
-            Navigation.intent(SearchPage.routeName);
+            Navigation.intentRoute(_createRouteToSearch());
           },
         ),
       ),
@@ -94,14 +95,25 @@ Widget _buildList() {
                 child: CircularProgressIndicator(),
               );
             } else if (state.state == ResultState.HasData) {
-              return ListView.builder(
-                  shrinkWrap: true,
-                  padding: const EdgeInsets.all(8.0),
-                  itemCount: state.result.restaurants.length,
-                  itemBuilder: (context, index) {
-                    return buildRestaurantItem(
-                        context, state.result.restaurants[index]);
-                  });
+              return AnimationLimiter(
+                child: ListView.builder(
+                    shrinkWrap: true,
+                    padding: const EdgeInsets.all(8.0),
+                    itemCount: state.result.restaurants.length,
+                    itemBuilder: (context, index) {
+                      return AnimationConfiguration.staggeredList(
+                        position: index,
+                        duration: const Duration(milliseconds: 375),
+                        child: SlideAnimation(
+                          verticalOffset: 50.0,
+                          child: FadeInAnimation(
+                            child: buildRestaurantItem(
+                                context, state.result.restaurants[index]),
+                          ),
+                        ),
+                      );
+                    }),
+              );
             } else if (state.state == ResultState.NoData) {
               return EmptyWidget(message: 'Data tidak berhasil ditampilkan');
             } else if (state.state == ResultState.Error) {
@@ -116,4 +128,22 @@ Widget _buildList() {
       )
     ],
   );
+}
+
+Route _createRouteToSearch() {
+  return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => SearchPage(),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        var begin = Offset(1.0, -1.0);
+        var end = Offset.zero;
+        var curve = Curves.ease;
+
+        var tween =
+            Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+        return SlideTransition(
+          position: animation.drive(tween),
+          child: child,
+        );
+      });
 }

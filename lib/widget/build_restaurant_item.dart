@@ -9,7 +9,7 @@ import 'package:restaurant_app_flutter/ui/detail_page.dart';
 Widget buildRestaurantItem(BuildContext context, Restaurants restaurant) {
   return GestureDetector(
     onTap: () {
-      Navigation.intentWithData(RestaurantDetail.routeName, restaurant.id);
+      Navigation.intentRoute(_createRouteToDetail(restaurant.id));
     },
     child: Container(
       padding: const EdgeInsets.all(4),
@@ -118,4 +118,23 @@ Widget buildRestaurantItem(BuildContext context, Restaurants restaurant) {
       ),
     ),
   );
+}
+
+Route _createRouteToDetail(String id) {
+  return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) =>
+          RestaurantDetail(restaurantsId: id),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        var begin = Offset(-1.0, -1.0);
+        var end = Offset.zero;
+        var curve = Curves.ease;
+
+        var tween =
+            Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+        return SlideTransition(
+          position: animation.drive(tween),
+          child: child,
+        );
+      });
 }

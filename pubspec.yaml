@@ -39,6 +39,7 @@ dependencies:
   android_alarm_manager: ^0.4.5+17
   shared_preferences: ^0.5.12+1
   path_provider: ^1.6.1
+  flutter_staggered_animations: "^0.1.2"
 
 dev_dependencies:
   flutter_test:

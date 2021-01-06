@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:provider/provider.dart';
 import 'package:restaurant_app_flutter/common/constant.dart';
 import 'package:restaurant_app_flutter/provider/database_provider.dart';
@@ -55,56 +56,69 @@ Widget _buildList() {
                 child: CircularProgressIndicator(),
               );
             } else if (state.state == ResultState.HasData) {
-              return ListView.builder(
-                shrinkWrap: true,
-                padding: const EdgeInsets.all(8),
-                itemCount: favorites.length,
-                itemBuilder: (context, index) {
-                  return Dismissible(
-                    key: Key(favorites[index].id),
-                    child: buildRestaurantItem(context, favorites[index]),
-                    direction: DismissDirection.endToStart,
-                    onDismissed: (direction) {
-                      state.removeFavorite(favorites[index].id);
-                      Scaffold.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(
-                            'Deleted from favorite',
-                            style: textStyle.copyWith(color: Colors.white),
-                          ),
-                          backgroundColor: Colors.black45,
-                          action: SnackBarAction(
-                            label: 'UNDO',
-                            textColor: Colors.lightBlueAccent,
-                            onPressed: () {
-                              state.addFavorite(favorites[index]);
+              return AnimationLimiter(
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  padding: const EdgeInsets.all(8),
+                  itemCount: favorites.length,
+                  itemBuilder: (context, index) {
+                    return AnimationConfiguration.staggeredList(
+                      position: index,
+                      duration: const Duration(milliseconds: 375),
+                      child: SlideAnimation(
+                        verticalOffset: 50.0,
+                        child: FadeInAnimation(
+                          child: Dismissible(
+                            key: Key(favorites[index].id),
+                            child:
+                                buildRestaurantItem(context, favorites[index]),
+                            direction: DismissDirection.endToStart,
+                            onDismissed: (direction) {
+                              state.removeFavorite(favorites[index].id);
+                              Scaffold.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    'Deleted from favorite',
+                                    style:
+                                        textStyle.copyWith(color: Colors.white),
+                                  ),
+                                  backgroundColor: Colors.black45,
+                                  action: SnackBarAction(
+                                    label: 'UNDO',
+                                    textColor: Colors.lightBlueAccent,
+                                    onPressed: () {
+                                      state.addFavorite(favorites[index]);
+                                    },
+                                  ),
+                                ),
+                              );
                             },
+                            background: Container(
+                              alignment: Alignment.centerRight,
+                              padding: const EdgeInsets.all(12),
+                              color: Colors.red,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.delete,
+                                    color: Colors.white,
+                                    size: 32,
+                                  ),
+                                  SizedBox(height: 8),
+                                  Text(
+                                    'DELETE',
+                                    style: textStyle.copyWith(fontSize: 16),
+                                  )
+                                ],
+                              ),
+                            ),
                           ),
                         ),
-                      );
-                    },
-                    background: Container(
-                      alignment: Alignment.centerRight,
-                      padding: const EdgeInsets.all(12),
-                      color: Colors.red,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.delete,
-                            color: Colors.white,
-                            size: 32,
-                          ),
-                          SizedBox(height: 8),
-                          Text(
-                            'DELETE',
-                            style: textStyle.copyWith(fontSize: 16),
-                          )
-                        ],
                       ),
-                    ),
-                  );
-                },
+                    );
+                  },
+                ),
               );
             } else if (state.state == ResultState.NoData) {
               return EmptyWidget(

@@ -22,6 +22,7 @@ class _SearchPageState extends State<SearchPage>
     with SingleTickerProviderStateMixin {
   TextEditingController myController;
   static const title = 'Search Restaurants';
+  String _oldString = '';
 
   @override
   void initState() {
@@ -41,11 +42,12 @@ class _SearchPageState extends State<SearchPage>
   updateList() {
     textQuery.add(myController.text);
     textQuery
-        .where((value) => value.length > 0)
+        .where((value) => value.isNotEmpty && value != _oldString)
         .debounceTime(Duration(milliseconds: 500))
         .listen((query) {
       Provider.of<SearchProvider>(context, listen: false)
           .fetchSearchedRestaurant(query);
+      _oldString = myController.text;
     });
   }
 
@@ -86,21 +88,29 @@ Widget _buildList(TextEditingController myController) {
         padding: const EdgeInsets.all(8),
         child: Container(
           height: 40,
-          padding: const EdgeInsets.symmetric(horizontal: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(16),
           ),
-          child: TextField(
-              style: TextStyle(color: Colors.black),
-              keyboardType: TextInputType.name,
-              decoration: InputDecoration(
-                  border: InputBorder.none,
-                  hintText: 'Search by name or menu',
-                  hintStyle: TextStyle(
-                    color: Colors.grey,
-                  )),
-              controller: myController),
+          child: Row(
+            children: [
+              Expanded(
+                child: TextField(
+                    style: TextStyle(color: Colors.black),
+                    keyboardType: TextInputType.name,
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      hintText: 'Search by name or menu',
+                      hintStyle: TextStyle(
+                        color: Colors.grey,
+                      ),
+                    ),
+                    controller: myController),
+              ),
+              Icon(CupertinoIcons.search)
+            ],
+          ),
         ),
       ),
       Expanded(
@@ -134,7 +144,7 @@ Widget _buildList(TextEditingController myController) {
             },
           ),
         ),
-      )
+      ),
     ],
   );
 }

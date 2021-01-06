@@ -55,7 +55,11 @@ class DatabaseHelper {
 
     List<Map<String, dynamic>> results = await db.query(_tblRestaurant);
 
-    return results.map((res) => Restaurants.fromJson(res)).toList();
+    return results
+        .map((res) => Restaurants.fromJson(res))
+        .toList()
+        .reversed
+        .toList();
   }
 
   Future<Map> getFavoritesById(String id) async {

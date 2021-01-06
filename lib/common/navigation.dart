@@ -3,8 +3,8 @@ import 'package:flutter/cupertino.dart';
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 class Navigation {
-  static intent(String routeName) {
-    navigatorKey.currentState.pushNamed(routeName);
+  static intentRoute(Route route) {
+    navigatorKey.currentState.push(route);
   }
 
   static intentWithData(String routeName, Object arguments) {
