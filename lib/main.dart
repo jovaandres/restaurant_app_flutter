@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:math';
 
 import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:flutter/cupertino.dart';
@@ -20,11 +19,9 @@ import 'package:restaurant_app_flutter/ui/detail_page.dart';
 import 'package:restaurant_app_flutter/ui/favorites_page.dart';
 import 'package:restaurant_app_flutter/ui/home_page.dart';
 import 'package:restaurant_app_flutter/ui/restaurant_list_page.dart';
-import 'package:restaurant_app_flutter/ui/search_page.dart';
 import 'package:restaurant_app_flutter/ui/setting_page.dart';
 import 'package:restaurant_app_flutter/utils/background_service.dart';
 import 'package:restaurant_app_flutter/utils/notification_helper.dart';
-import 'package:restaurant_app_flutter/widget/empty_list.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final ApiService apiService = ApiService();

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:restaurant_app_flutter/common/constant.dart';
 import 'package:restaurant_app_flutter/provider/search_provider.dart';
 import 'package:restaurant_app_flutter/utils/result_state.dart';
 import 'package:restaurant_app_flutter/widget/build_restaurant_item.dart';
@@ -18,8 +19,7 @@ class SearchPage extends StatefulWidget {
   _SearchPageState createState() => _SearchPageState();
 }
 
-class _SearchPageState extends State<SearchPage>
-    with SingleTickerProviderStateMixin {
+class _SearchPageState extends State<SearchPage> {
   TextEditingController myController;
   static const title = 'Search Restaurants';
   String _oldString = '';
@@ -35,7 +35,6 @@ class _SearchPageState extends State<SearchPage>
   void dispose() {
     myController.removeListener(updateList);
     myController.dispose();
-    textQuery.close();
     super.dispose();
   }
 
@@ -53,10 +52,9 @@ class _SearchPageState extends State<SearchPage>
 
   Widget _buildAndroid(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(title),
+      body: SafeArea(
+        child: _buildList(myController),
       ),
-      body: _buildList(myController),
     );
   }
 
@@ -84,34 +82,33 @@ Widget _buildList(TextEditingController myController) {
   return Column(
     mainAxisAlignment: MainAxisAlignment.start,
     children: [
+      SizedBox(height: 8),
+      Center(
+        child: Text(
+          '• Explore Restaurant •',
+          style: textStyle.copyWith(fontWeight: FontWeight.bold),
+        ),
+      ),
       Padding(
         padding: const EdgeInsets.all(8),
-        child: Container(
-          height: 40,
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(16),
-          ),
-          child: Row(
-            children: [
-              Expanded(
-                child: TextField(
-                    style: TextStyle(color: Colors.black),
-                    keyboardType: TextInputType.name,
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: 'Search by name or menu',
-                      hintStyle: TextStyle(
-                        color: Colors.grey,
-                      ),
-                    ),
-                    controller: myController),
+        child: TextField(
+            style: textStyle,
+            keyboardType: TextInputType.name,
+            decoration: InputDecoration(
+              labelText: 'Search Restaurant',
+              hintText: 'Search by name or menu',
+              isDense: true,
+              prefixIcon: Icon(
+                CupertinoIcons.search,
+                color: Colors.lightBlueAccent,
+                size: 24,
               ),
-              Icon(CupertinoIcons.search)
-            ],
-          ),
-        ),
+              hintStyle: TextStyle(color: Colors.grey),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(24),
+              ),
+            ),
+            controller: myController),
       ),
       Expanded(
         child: Padding(
