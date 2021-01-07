@@ -18,39 +18,47 @@ class RestaurantListPage extends StatelessWidget {
 
   Widget _buildAndroid(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+      body: SafeArea(
+        child: Column(
           children: [
-            Text(
-              title,
-              style: textStyle.copyWith(fontSize: 24),
-            ),
-            Text(
-              'Recommendation restaurant for you!',
-              style: textStyle.copyWith(
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
+            Container(
+              height: 60,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(60),
+                    bottomRight: Radius.circular(60),
+                  ),
+                  color: Colors.grey[900]),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Text(
+                    title,
+                    style: textStyle.copyWith(fontSize: 22),
+                  ),
+                  IconButton(
+                    icon: Icon(CupertinoIcons.search),
+                    onPressed: () {
+                      Navigation.intentRoute(_createRouteToSearch());
+                    },
+                  )
+                ],
               ),
+            ),
+            SizedBox(height: 8),
+            Center(
+              child: Text(
+                '• Recommendation Restaurant For You •',
+                style: textStyle.copyWith(fontWeight: FontWeight.bold),
+              ),
+            ),
+            SizedBox(height: 8),
+            Expanded(
+              child: _buildList(),
             )
           ],
         ),
-        bottom: PreferredSize(
-          preferredSize: Size(0, 8),
-          child: SizedBox(
-            height: 8,
-          ),
-        ),
-        actions: [
-          IconButton(
-            icon: Icon(CupertinoIcons.search),
-            onPressed: () {
-              Navigation.intentRoute(_createRouteToSearch());
-            },
-          ),
-        ],
       ),
-      body: _buildList(),
     );
   }
 

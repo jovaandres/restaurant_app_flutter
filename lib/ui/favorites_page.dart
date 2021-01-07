@@ -15,10 +15,30 @@ class FavoritePage extends StatelessWidget {
 
   Widget _buildAndroid(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(title),
+      body: SafeArea(
+        child: Column(
+          children: [
+            Container(
+              height: 60,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(60),
+                    bottomRight: Radius.circular(60),
+                  ),
+                  color: Colors.grey[900]),
+              child: Center(
+                child: Text(
+                  title,
+                  style: textStyle.copyWith(fontSize: 22),
+                ),
+              ),
+            ),
+            Expanded(
+              child: _buildList(),
+            )
+          ],
+        ),
       ),
-      body: _buildList(),
     );
   }
 
