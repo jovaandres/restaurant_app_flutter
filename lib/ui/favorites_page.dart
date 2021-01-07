@@ -10,7 +10,6 @@ import 'package:restaurant_app_flutter/widget/empty_list.dart';
 import 'package:restaurant_app_flutter/widget/platform_widget.dart';
 
 class FavoritePage extends StatelessWidget {
-  static const routeName = '/favorite_page';
   static const title = 'Favorite Restaurants';
 
   Widget _buildAndroid(BuildContext context) {

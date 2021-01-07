@@ -10,7 +10,6 @@ import 'package:restaurant_app_flutter/widget/custom_dialog.dart';
 import 'package:restaurant_app_flutter/widget/platform_widget.dart';
 
 class SettingPage extends StatelessWidget {
-  static const routeName = '/setting_page';
   static const title = 'Setting';
 
   Widget _buildAndroid(BuildContext context) {

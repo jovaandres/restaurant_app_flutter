@@ -13,7 +13,6 @@ import 'package:restaurant_app_flutter/widget/no_connection_widget.dart';
 import 'package:restaurant_app_flutter/widget/platform_widget.dart';
 
 class RestaurantListPage extends StatelessWidget {
-  static const routeName = '/restaurant_list';
   static const title = 'Restaurant';
 
   Widget _buildAndroid(BuildContext context) {

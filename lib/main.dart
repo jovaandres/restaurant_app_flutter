@@ -16,10 +16,7 @@ import 'package:restaurant_app_flutter/provider/restaurant_provider.dart';
 import 'package:restaurant_app_flutter/provider/scheduling_provider.dart';
 import 'package:restaurant_app_flutter/provider/search_provider.dart';
 import 'package:restaurant_app_flutter/ui/detail_page.dart';
-import 'package:restaurant_app_flutter/ui/favorites_page.dart';
 import 'package:restaurant_app_flutter/ui/home_page.dart';
-import 'package:restaurant_app_flutter/ui/restaurant_list_page.dart';
-import 'package:restaurant_app_flutter/ui/setting_page.dart';
 import 'package:restaurant_app_flutter/utils/background_service.dart';
 import 'package:restaurant_app_flutter/utils/notification_helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -88,12 +85,9 @@ class MyApp extends StatelessWidget {
         initialRoute: HomePage.routeName,
         routes: {
           HomePage.routeName: (context) => HomePage(),
-          RestaurantListPage.routeName: (context) => RestaurantListPage(),
           RestaurantDetail.routeName: (context) => RestaurantDetail(
                 restaurantsId: ModalRoute.of(context).settings.arguments,
               ),
-          FavoritePage.routeName: (context) => FavoritePage(),
-          SettingPage.routeName: (context) => SettingPage()
         },
       ),
     );
