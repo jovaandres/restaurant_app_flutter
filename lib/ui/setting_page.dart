@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:restaurant_app_flutter/common/constant.dart';
 import 'package:restaurant_app_flutter/provider/preferences_provider.dart';
 import 'package:restaurant_app_flutter/provider/scheduling_provider.dart';
+import 'package:restaurant_app_flutter/widget/custom_android_app_bar.dart';
 import 'package:restaurant_app_flutter/widget/custom_dialog.dart';
 import 'package:restaurant_app_flutter/widget/platform_widget.dart';
 
@@ -14,39 +15,29 @@ class SettingPage extends StatelessWidget {
 
   Widget _buildAndroid(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[850],
-      body: SafeArea(
-        child: Column(
-          children: [
-            Container(
-              height: 60,
+      appBar: CustomAndroidAppBar(
+        child: Center(
+          child: Text(
+            title,
+            style: textStyle.copyWith(fontSize: 22),
+          ),
+        ),
+      ),
+      body: Column(
+        children: [
+          SizedBox(height: 72),
+          Expanded(
+            child: Container(
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(60),
-                    bottomRight: Radius.circular(60),
+                    topLeft: Radius.circular(60),
+                    topRight: Radius.circular(60),
                   ),
-                  color: Colors.grey[900]),
-              child: Center(
-                child: Text(
-                  title,
-                  style: textStyle.copyWith(fontSize: 22),
-                ),
-              ),
+                  color: Color.fromRGBO(72, 85, 99, 1)),
+              child: _buildList(),
             ),
-            SizedBox(height: 72),
-            Expanded(
-              child: Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(60),
-                      topRight: Radius.circular(60),
-                    ),
-                    color: Color.fromRGBO(72, 85, 99, 1)),
-                child: _buildList(),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

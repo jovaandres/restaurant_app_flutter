@@ -8,6 +8,7 @@ import 'package:restaurant_app_flutter/provider/restaurant_provider.dart';
 import 'package:restaurant_app_flutter/ui/search_page.dart';
 import 'package:restaurant_app_flutter/utils/result_state.dart';
 import 'package:restaurant_app_flutter/widget/build_restaurant_item.dart';
+import 'package:restaurant_app_flutter/widget/custom_android_app_bar.dart';
 import 'package:restaurant_app_flutter/widget/empty_list.dart';
 import 'package:restaurant_app_flutter/widget/no_connection_widget.dart';
 import 'package:restaurant_app_flutter/widget/platform_widget.dart';
@@ -17,47 +18,42 @@ class RestaurantListPage extends StatelessWidget {
 
   Widget _buildAndroid(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Column(
+      appBar: CustomAndroidAppBar(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            Container(
-              height: 60,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(60),
-                    bottomRight: Radius.circular(60),
-                  ),
-                  color: Colors.grey[900]),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Text(
-                    title,
-                    style: textStyle.copyWith(fontSize: 22),
-                  ),
-                  IconButton(
-                    icon: Icon(CupertinoIcons.search),
-                    onPressed: () {
-                      Navigation.intentRoute(_createRouteToSearch());
-                    },
-                  )
-                ],
-              ),
+            Text(
+              title,
+              style: textStyle.copyWith(fontSize: 22),
             ),
-            SizedBox(height: 8),
-            Center(
-              child: Text(
-                '• Recommendation Restaurant For You •',
-                style: textStyle.copyWith(fontWeight: FontWeight.bold),
-              ),
-            ),
-            SizedBox(height: 8),
-            Expanded(
-              child: _buildList(),
+            IconButton(
+              icon: Icon(CupertinoIcons.search),
+              onPressed: () {
+                Navigation.intentRoute(_createRouteToSearch());
+              },
             )
           ],
         ),
       ),
+      body: _buildList(),
+      // SafeArea(
+      //   child: Column(
+      //     children: [
+
+      //       SizedBox(height: 8),
+      //       Center(
+      //         child: Text(
+      //           '• Recommendation Restaurant For You •',
+      //           style: textStyle.copyWith(fontWeight: FontWeight.bold),
+      //         ),
+      //       ),
+      //       SizedBox(height: 8),
+      //       Expanded(
+      //         child: _buildList(),
+      //       )
+      //     ],
+      //   ),
+      // ),
     );
   }
 

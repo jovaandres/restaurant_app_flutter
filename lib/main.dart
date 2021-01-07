@@ -86,8 +86,7 @@ class MyApp extends StatelessWidget {
         routes: {
           HomePage.routeName: (context) => HomePage(),
           RestaurantDetail.routeName: (context) => RestaurantDetail(
-                restaurantsId: ModalRoute.of(context).settings.arguments,
-              ),
+              restaurantsId: ModalRoute.of(context).settings.arguments),
         },
       ),
     );

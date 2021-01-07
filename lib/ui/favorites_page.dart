@@ -6,6 +6,7 @@ import 'package:restaurant_app_flutter/common/constant.dart';
 import 'package:restaurant_app_flutter/provider/database_provider.dart';
 import 'package:restaurant_app_flutter/utils/result_state.dart';
 import 'package:restaurant_app_flutter/widget/build_restaurant_item.dart';
+import 'package:restaurant_app_flutter/widget/custom_android_app_bar.dart';
 import 'package:restaurant_app_flutter/widget/empty_list.dart';
 import 'package:restaurant_app_flutter/widget/platform_widget.dart';
 
@@ -14,30 +15,39 @@ class FavoritePage extends StatelessWidget {
 
   Widget _buildAndroid(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Column(
-          children: [
-            Container(
-              height: 60,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(60),
-                    bottomRight: Radius.circular(60),
-                  ),
-                  color: Colors.grey[900]),
-              child: Center(
-                child: Text(
-                  title,
-                  style: textStyle.copyWith(fontSize: 22),
-                ),
-              ),
-            ),
-            Expanded(
-              child: _buildList(),
-            )
-          ],
+      appBar: CustomAndroidAppBar(
+        child: Center(
+          child: Text(
+            title,
+            style: textStyle.copyWith(fontSize: 22),
+          ),
         ),
       ),
+      body: _buildList(),
+      // SafeArea(
+      //   child: Column(
+      //     children: [
+      //       Container(
+      //         height: 60,
+      //         decoration: BoxDecoration(
+      //             borderRadius: BorderRadius.only(
+      //               bottomLeft: Radius.circular(60),
+      //               bottomRight: Radius.circular(60),
+      //             ),
+      //             color: Colors.grey[900]),
+      //         child: Center(
+      //           child: Text(
+      //             title,
+      //             style: textStyle.copyWith(fontSize: 22),
+      //           ),
+      //         ),
+      //       ),
+      //       Expanded(
+      //         child: _buildList(),
+      //       )
+      //     ],
+      //   ),
+      // ),
     );
   }
 
