@@ -1,3 +1,4 @@
+import 'package:restaurant_app_flutter/common/constant.dart';
 import 'package:restaurant_app_flutter/data/model/restaurant.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -15,14 +16,12 @@ class DatabaseHelper {
     return _databaseHelper;
   }
 
-  static const String _tblRestaurant = 'restaurants';
-
   Future<Database> _initializeDb() async {
     var path = getDatabasesPath();
     var db = openDatabase(
       '$path/restaurant.db',
       onCreate: (db, version) async {
-        await db.execute('''CREATE TABLE $_tblRestaurant (
+        await db.execute('''CREATE TABLE $tblRestaurant (
           id TEXT PRIMARY KEY,
           name TEXT,
           description TEXT,
@@ -47,13 +46,13 @@ class DatabaseHelper {
 
   Future<void> insertFavorite(Restaurants restaurant) async {
     final db = await database;
-    await db.insert(_tblRestaurant, restaurant.toJson());
+    await db.insert(tblRestaurant, restaurant.toJson());
   }
 
   Future<List<Restaurants>> getFavorites() async {
     final db = await database;
 
-    List<Map<String, dynamic>> results = await db.query(_tblRestaurant);
+    List<Map<String, dynamic>> results = await db.query(tblRestaurant);
 
     return results
         .map((res) => Restaurants.fromJson(res))
@@ -65,7 +64,7 @@ class DatabaseHelper {
   Future<Map> getFavoritesById(String id) async {
     final db = await database;
     List<Map<String, dynamic>> result = await db.query(
-      _tblRestaurant,
+      tblRestaurant,
       where: 'id = ?',
       whereArgs: [id],
     );
@@ -80,7 +79,7 @@ class DatabaseHelper {
   Future<void> removeFavorite(String id) async {
     final db = await database;
     await db.delete(
-      _tblRestaurant,
+      tblRestaurant,
       where: 'id = ?',
       whereArgs: [id],
     );

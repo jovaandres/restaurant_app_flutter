@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 import 'package:restaurant_app_flutter/common/navigation.dart';
+import 'package:restaurant_app_flutter/common/styles.dart';
 import 'package:restaurant_app_flutter/data/api/api_service.dart';
 import 'package:restaurant_app_flutter/data/db/database_helper.dart';
 import 'package:restaurant_app_flutter/data/preferences/preferences_helper.dart';
@@ -67,26 +68,30 @@ class MyApp extends StatelessWidget {
           create: (_) => SchedulingProvider(),
         )
       ],
-      child: MaterialApp(
-        navigatorKey: navigatorKey,
-        title: 'Restaurant',
-        theme: ThemeData(
-          brightness: Brightness.dark,
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-        ),
-        builder: (context, child) {
-          return CupertinoTheme(
-            data: CupertinoThemeData(brightness: Brightness.dark),
-            child: Material(
-              child: child,
-            ),
+      child: Consumer<PreferencesProvider>(
+        builder: (context, provider, child) {
+          return MaterialApp(
+            navigatorKey: navigatorKey,
+            title: 'Restaurant',
+            theme: provider.isDarkTheme ? darkTheme : lightTheme,
+            builder: (context, child) {
+              return CupertinoTheme(
+                data: CupertinoThemeData(
+                  brightness:
+                      provider.isDarkTheme ? Brightness.dark : Brightness.light,
+                ),
+                child: Material(
+                  child: child,
+                ),
+              );
+            },
+            initialRoute: HomePage.routeName,
+            routes: {
+              HomePage.routeName: (context) => HomePage(),
+              RestaurantDetail.routeName: (context) => RestaurantDetail(
+                  restaurantsId: ModalRoute.of(context).settings.arguments),
+            },
           );
-        },
-        initialRoute: HomePage.routeName,
-        routes: {
-          HomePage.routeName: (context) => HomePage(),
-          RestaurantDetail.routeName: (context) => RestaurantDetail(
-              restaurantsId: ModalRoute.of(context).settings.arguments),
         },
       ),
     );

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:restaurant_app_flutter/common/custom_color_scheme.dart';
 
 class CustomAndroidAppBar extends PreferredSize {
   final Widget child;
@@ -20,7 +21,7 @@ class CustomAndroidAppBar extends PreferredSize {
               bottomLeft: Radius.circular(60),
               bottomRight: Radius.circular(60),
             ),
-            color: Colors.grey[900]),
+            color: Theme.of(context).colorScheme.customAppBarColor),
         child: child,
       ),
     );

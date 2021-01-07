@@ -6,7 +6,18 @@ class PreferencesHelper {
 
   PreferencesHelper({@required this.sharedPreferences});
 
+  static const DARK_THEME = 'DARK_THEME';
   static const DAILY_REMINDER = 'DAILY_REMINDER';
+
+  Future<bool> get isDarkTheme async {
+    final prefs = await sharedPreferences;
+    return prefs.getBool(DARK_THEME) ?? true;
+  }
+
+  void setDarkTheme(bool value) async {
+    final prefs = await sharedPreferences;
+    prefs.setBool(DARK_THEME, value);
+  }
 
   Future<bool> get isDailyReminderActive async {
     final prefs = await sharedPreferences;

@@ -13,6 +13,100 @@ import 'package:restaurant_app_flutter/widget/platform_widget.dart';
 class FavoritePage extends StatelessWidget {
   static const title = 'Favorite Restaurants';
 
+  Widget _buildList() {
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Expanded(
+          child: Consumer<DatabaseProvider>(
+            builder: (context, state, _) {
+              final favorites = state.favorites;
+              if (state.state == ResultState.Loading) {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else if (state.state == ResultState.HasData) {
+                return AnimationLimiter(
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    padding: const EdgeInsets.all(8),
+                    itemCount: favorites.length,
+                    itemBuilder: (context, index) {
+                      return AnimationConfiguration.staggeredList(
+                        position: index,
+                        duration: const Duration(milliseconds: 375),
+                        child: SlideAnimation(
+                          verticalOffset: 50.0,
+                          child: FadeInAnimation(
+                            child: Dismissible(
+                              key: Key(favorites[index].id),
+                              child: buildRestaurantItem(
+                                  context, favorites[index]),
+                              direction: DismissDirection.endToStart,
+                              onDismissed: (direction) {
+                                state.removeFavorite(favorites[index].id);
+                                Scaffold.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      'Deleted from favorite',
+                                      style: textStyle.copyWith(
+                                          color: Colors.white),
+                                    ),
+                                    backgroundColor: Colors.black45,
+                                    action: SnackBarAction(
+                                      label: 'UNDO',
+                                      textColor: Colors.lightBlueAccent,
+                                      onPressed: () {
+                                        state.addFavorite(favorites[index]);
+                                      },
+                                    ),
+                                  ),
+                                );
+                              },
+                              background: Container(
+                                alignment: Alignment.centerRight,
+                                padding: const EdgeInsets.all(12),
+                                color: Colors.red,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      Icons.delete,
+                                      color: Colors.white,
+                                      size: 32,
+                                    ),
+                                    SizedBox(height: 8),
+                                    Text(
+                                      'DELETE',
+                                      style: textStyle.copyWith(fontSize: 16),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                );
+              } else if (state.state == ResultState.NoData) {
+                return EmptyWidget(
+                  message: 'Belum ada restaurant favorite',
+                );
+              } else {
+                return Center(
+                  child: Text(''),
+                );
+              }
+            },
+          ),
+        )
+      ],
+    );
+  }
+
   Widget _buildAndroid(BuildContext context) {
     return Scaffold(
       appBar: CustomAndroidAppBar(
@@ -24,30 +118,6 @@ class FavoritePage extends StatelessWidget {
         ),
       ),
       body: _buildList(),
-      // SafeArea(
-      //   child: Column(
-      //     children: [
-      //       Container(
-      //         height: 60,
-      //         decoration: BoxDecoration(
-      //             borderRadius: BorderRadius.only(
-      //               bottomLeft: Radius.circular(60),
-      //               bottomRight: Radius.circular(60),
-      //             ),
-      //             color: Colors.grey[900]),
-      //         child: Center(
-      //           child: Text(
-      //             title,
-      //             style: textStyle.copyWith(fontSize: 22),
-      //           ),
-      //         ),
-      //       ),
-      //       Expanded(
-      //         child: _buildList(),
-      //       )
-      //     ],
-      //   ),
-      // ),
     );
   }
 
@@ -69,98 +139,4 @@ class FavoritePage extends StatelessWidget {
       iOSBuilder: _buildIOS,
     );
   }
-}
-
-Widget _buildList() {
-  return Column(
-    mainAxisSize: MainAxisSize.max,
-    mainAxisAlignment: MainAxisAlignment.start,
-    children: [
-      Expanded(
-        child: Consumer<DatabaseProvider>(
-          builder: (context, state, _) {
-            final favorites = state.favorites;
-            if (state.state == ResultState.Loading) {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            } else if (state.state == ResultState.HasData) {
-              return AnimationLimiter(
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  padding: const EdgeInsets.all(8),
-                  itemCount: favorites.length,
-                  itemBuilder: (context, index) {
-                    return AnimationConfiguration.staggeredList(
-                      position: index,
-                      duration: const Duration(milliseconds: 375),
-                      child: SlideAnimation(
-                        verticalOffset: 50.0,
-                        child: FadeInAnimation(
-                          child: Dismissible(
-                            key: Key(favorites[index].id),
-                            child:
-                                buildRestaurantItem(context, favorites[index]),
-                            direction: DismissDirection.endToStart,
-                            onDismissed: (direction) {
-                              state.removeFavorite(favorites[index].id);
-                              Scaffold.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    'Deleted from favorite',
-                                    style:
-                                        textStyle.copyWith(color: Colors.white),
-                                  ),
-                                  backgroundColor: Colors.black45,
-                                  action: SnackBarAction(
-                                    label: 'UNDO',
-                                    textColor: Colors.lightBlueAccent,
-                                    onPressed: () {
-                                      state.addFavorite(favorites[index]);
-                                    },
-                                  ),
-                                ),
-                              );
-                            },
-                            background: Container(
-                              alignment: Alignment.centerRight,
-                              padding: const EdgeInsets.all(12),
-                              color: Colors.red,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.delete,
-                                    color: Colors.white,
-                                    size: 32,
-                                  ),
-                                  SizedBox(height: 8),
-                                  Text(
-                                    'DELETE',
-                                    style: textStyle.copyWith(fontSize: 16),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              );
-            } else if (state.state == ResultState.NoData) {
-              return EmptyWidget(
-                message: 'Belum ada restaurant favorite',
-              );
-            } else {
-              return Center(
-                child: Text(''),
-              );
-            }
-          },
-        ),
-      )
-    ],
-  );
 }

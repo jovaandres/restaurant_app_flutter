@@ -16,6 +16,53 @@ import 'package:restaurant_app_flutter/widget/platform_widget.dart';
 class RestaurantListPage extends StatelessWidget {
   static const title = 'Restaurant';
 
+  Widget _buildList() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Expanded(
+          child: Consumer<RestaurantProvider>(
+            builder: (context, state, _) {
+              if (state.state == ResultState.Loading) {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else if (state.state == ResultState.HasData) {
+                return AnimationLimiter(
+                  child: ListView.builder(
+                      shrinkWrap: true,
+                      padding: const EdgeInsets.all(8.0),
+                      itemCount: state.result.restaurants.length,
+                      itemBuilder: (context, index) {
+                        return AnimationConfiguration.staggeredList(
+                          position: index,
+                          duration: const Duration(milliseconds: 375),
+                          child: SlideAnimation(
+                            verticalOffset: 50.0,
+                            child: FadeInAnimation(
+                              child: buildRestaurantItem(
+                                  context, state.result.restaurants[index]),
+                            ),
+                          ),
+                        );
+                      }),
+                );
+              } else if (state.state == ResultState.NoData) {
+                return EmptyWidget(message: 'Data tidak berhasil ditampilkan');
+              } else if (state.state == ResultState.Error) {
+                return NoConnectionWidget();
+              } else {
+                return Center(
+                  child: Text(''),
+                );
+              }
+            },
+          ),
+        )
+      ],
+    );
+  }
+
   Widget _buildAndroid(BuildContext context) {
     return Scaffold(
       appBar: CustomAndroidAppBar(
@@ -36,24 +83,6 @@ class RestaurantListPage extends StatelessWidget {
         ),
       ),
       body: _buildList(),
-      // SafeArea(
-      //   child: Column(
-      //     children: [
-
-      //       SizedBox(height: 8),
-      //       Center(
-      //         child: Text(
-      //           '• Recommendation Restaurant For You •',
-      //           style: textStyle.copyWith(fontWeight: FontWeight.bold),
-      //         ),
-      //       ),
-      //       SizedBox(height: 8),
-      //       Expanded(
-      //         child: _buildList(),
-      //       )
-      //     ],
-      //   ),
-      // ),
     );
   }
 
@@ -84,53 +113,6 @@ class RestaurantListPage extends StatelessWidget {
       iOSBuilder: _buildIOS,
     );
   }
-}
-
-Widget _buildList() {
-  return Column(
-    mainAxisAlignment: MainAxisAlignment.start,
-    children: [
-      Expanded(
-        child: Consumer<RestaurantProvider>(
-          builder: (context, state, _) {
-            if (state.state == ResultState.Loading) {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            } else if (state.state == ResultState.HasData) {
-              return AnimationLimiter(
-                child: ListView.builder(
-                    shrinkWrap: true,
-                    padding: const EdgeInsets.all(8.0),
-                    itemCount: state.result.restaurants.length,
-                    itemBuilder: (context, index) {
-                      return AnimationConfiguration.staggeredList(
-                        position: index,
-                        duration: const Duration(milliseconds: 375),
-                        child: SlideAnimation(
-                          verticalOffset: 50.0,
-                          child: FadeInAnimation(
-                            child: buildRestaurantItem(
-                                context, state.result.restaurants[index]),
-                          ),
-                        ),
-                      );
-                    }),
-              );
-            } else if (state.state == ResultState.NoData) {
-              return EmptyWidget(message: 'Data tidak berhasil ditampilkan');
-            } else if (state.state == ResultState.Error) {
-              return NoConnectionWidget();
-            } else {
-              return Center(
-                child: Text(''),
-              );
-            }
-          },
-        ),
-      )
-    ],
-  );
 }
 
 Route _createRouteToSearch() {
