@@ -5,6 +5,7 @@ import 'package:restaurant_app_flutter/common/constant.dart';
 import 'package:restaurant_app_flutter/common/navigation.dart';
 import 'package:restaurant_app_flutter/data/model/restaurant.dart';
 import 'package:restaurant_app_flutter/ui/detail_page.dart';
+import 'package:restaurant_app_flutter/common/custom_color_scheme.dart';
 
 Widget buildRestaurantItem(BuildContext context, Restaurants restaurant) {
   return GestureDetector(
@@ -18,16 +19,10 @@ Widget buildRestaurantItem(BuildContext context, Restaurants restaurant) {
           BoxShadow(
             offset: Offset(-15, -15),
             blurRadius: 22,
-            color: Colors.cyan.withOpacity(0.22),
+            color: Theme.of(context).colorScheme.shadowColor,
           )
         ],
-        gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Color.fromRGBO(72, 85, 99, 1),
-              Color.fromRGBO(41, 50, 60, 1)
-            ]),
+        gradient: Theme.of(context).colorScheme.cardColor,
         color: Colors.grey.withOpacity(1),
         borderRadius: BorderRadius.all(Radius.circular(0)),
       ),

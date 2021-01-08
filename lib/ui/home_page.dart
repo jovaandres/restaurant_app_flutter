@@ -31,7 +31,7 @@ class _HomePageState extends State<HomePage> {
 
   List<BottomNavigationBarItem> _bottomBarItem = [
     BottomNavigationBarItem(
-        icon: Icon(CupertinoIcons.home), label: RestaurantListPage.title),
+        icon: Icon(CupertinoIcons.house_fill), label: RestaurantListPage.title),
     BottomNavigationBarItem(
         icon: Icon(CupertinoIcons.heart_fill), label: 'Favorite'),
     BottomNavigationBarItem(

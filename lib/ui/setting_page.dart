@@ -22,14 +22,13 @@ class _SettingPageState extends State<SettingPage> {
   bool boolean = false;
 
   Widget _buildList() {
-    ;
     return Consumer<PreferencesProvider>(
       builder: (context, provider, _) {
         return ListView(
           children: [
-            SizedBox(height: 6),
+            SizedBox(height: 12),
             Center(child: Icon(Icons.menu)),
-            SizedBox(height: 30),
+            SizedBox(height: 26),
             Divider(color: Colors.black),
             Material(
               color: Theme.of(context).colorScheme.settingPadColor,

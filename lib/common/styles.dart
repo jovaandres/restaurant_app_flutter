@@ -11,10 +11,11 @@ ThemeData lightTheme = ThemeData(
     accentColor: secondaryColor,
     scaffoldBackgroundColor: Colors.white,
     visualDensity: VisualDensity.adaptivePlatformDensity,
+    iconTheme: IconThemeData(color: Colors.green),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
-        backgroundColor: Colors.grey[350],
+        backgroundColor: Colors.blueGrey[100],
         selectedItemColor: Colors.lightBlueAccent,
-        unselectedItemColor: Colors.grey));
+        unselectedItemColor: Colors.blueGrey[700]));
 
 ThemeData darkTheme = ThemeData.dark().copyWith(
     primaryColor: darkPrimaryColor,
