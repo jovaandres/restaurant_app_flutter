@@ -101,8 +101,7 @@ class _SearchPageState extends State<SearchPage> {
                             context, state.result.restaurants[index]);
                       });
                 } else if (state.state == ResultState.NoData) {
-                  return EmptyWidget(
-                      message: 'Coba mencari dengan kata kunci lain');
+                  return EmptyWidget(message: 'Try another keyword');
                 } else if (state.state == ResultState.Error) {
                   return NoConnectionWidget();
                 } else {

@@ -12,6 +12,7 @@ import 'package:restaurant_app_flutter/widget/platform_widget.dart';
 
 class FavoritePage extends StatelessWidget {
   static const title = 'Favorite Restaurants';
+  static const routeName = '/favorite_page';
 
   Widget _buildList() {
     return Column(
@@ -93,7 +94,7 @@ class FavoritePage extends StatelessWidget {
                 );
               } else if (state.state == ResultState.NoData) {
                 return EmptyWidget(
-                  message: 'Belum ada restaurant favorite',
+                  message: 'There is no favorite restaurant yet',
                 );
               } else {
                 return Center(

@@ -14,7 +14,7 @@ class EmptyWidget extends StatelessWidget {
       child: EmptyListWidget(
         image: null,
         packageImage: PackageImage.Image_4,
-        title: 'Tidak Ada Hasil',
+        title: 'Nothing Found Here',
         subTitle: message,
         titleTextStyle: Theme.of(context)
             .typography

@@ -10,8 +10,8 @@ class NoConnectionWidget extends StatelessWidget {
       child: EmptyListWidget(
         image: null,
         packageImage: PackageImage.Image_1,
-        title: 'Tidak tersambung ke internet',
-        subTitle: 'Periksa kembali koneksi internet anda',
+        title: 'Error when showing widget',
+        subTitle: 'Check your internet connection',
         titleTextStyle: Theme.of(context)
             .typography
             .dense

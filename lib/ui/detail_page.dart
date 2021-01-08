@@ -45,6 +45,11 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
     super.dispose();
   }
 
+  Widget snackBar(String content) {
+    return SnackBar(
+        content: Text(content), duration: Duration(milliseconds: 750));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -119,17 +124,24 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
                                       color: Colors.pinkAccent,
                                     ),
                                     onPressed: () async {
-                                      isFavorite
-                                          ? stateFav
-                                              .removeFavorite(state.result.id)
-                                          : stateFav.addFavorite(Restaurants(
-                                              id: state.result.id,
-                                              name: state.result.name,
-                                              description:
-                                                  state.result.description,
-                                              pictureId: state.result.pictureId,
-                                              city: state.result.city,
-                                              rating: state.result.rating));
+                                      if (isFavorite) {
+                                        stateFav
+                                            .removeFavorite(state.result.id);
+                                        Scaffold.of(context).showSnackBar(
+                                            snackBar('Deleted from favorite'));
+                                      } else {
+                                        stateFav.addFavorite(Restaurants(
+                                            id: state.result.id,
+                                            name: state.result.name,
+                                            description:
+                                                state.result.description,
+                                            pictureId: state.result.pictureId,
+                                            city: state.result.city,
+                                            rating: state.result.rating));
+
+                                        Scaffold.of(context).showSnackBar(
+                                            snackBar('Added to favorite'));
+                                      }
                                     },
                                   );
                                 },
@@ -376,34 +388,36 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
                                                         ),
                                                       ),
                                                       Form(
-                                                          key: _formKey,
-                                                          child: TextFormField(
-                                                            validator: (value) {
-                                                              if (value
-                                                                  .isEmpty) {
-                                                                return 'Tulis Review Sedikitnya Satu Kata';
-                                                              }
-                                                              return null;
-                                                            },
-                                                            controller:
-                                                                myController2,
-                                                            decoration:
-                                                                InputDecoration(
-                                                              hintText:
-                                                                  'Tulis Review',
-                                                            ),
-                                                          )),
+                                                        key: _formKey,
+                                                        child: TextFormField(
+                                                          validator: (value) {
+                                                            if (value.isEmpty) {
+                                                              return 'Tulis Review Sedikitnya Satu Kata';
+                                                            }
+                                                            return null;
+                                                          },
+                                                          controller:
+                                                              myController2,
+                                                          decoration:
+                                                              InputDecoration(
+                                                            hintText:
+                                                                'Tulis Review',
+                                                          ),
+                                                        ),
+                                                      ),
                                                       SizedBox(height: 16),
                                                       RaisedButton(
-                                                        color:
-                                                            Colors.greenAccent,
+                                                        color: Theme.of(context)
+                                                            .accentColor,
                                                         child: Text(
                                                           'SEND',
                                                           style: textStyle
                                                               .copyWith(
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                          ),
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  color: Colors
+                                                                      .white),
                                                         ),
                                                         onPressed: () {
                                                           if (_formKey
@@ -521,7 +535,7 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
               ),
             );
           } else if (state.state == ResultState.NoData) {
-            return EmptyWidget(message: 'Data tidak berhasil ditampilkan');
+            return EmptyWidget(message: 'Data not displayed successfully');
           } else if (state.state == ResultState.Error) {
             return NoConnectionWidget();
           } else {
