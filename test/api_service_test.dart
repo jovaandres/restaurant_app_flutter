@@ -11,6 +11,15 @@ void main() {
     final id = 'rqdv5juczeskfw1e867';
     final name = 'Jova';
     final review = 'Kopinya pahit';
+    final meltingPot = {
+      "id": "rqdv5juczeskfw1e867",
+      "name": "Melting Pot",
+      "description":
+          "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. ...",
+      "pictureId": "14",
+      "city": "Medan",
+      "rating": 4.2
+    };
 
     setUp(() {
       apiService = ApiService();
@@ -22,7 +31,7 @@ void main() {
 
       // assert
       expect(result.error, false);
-      expect(result.restaurants.isNotEmpty, true);
+      expect(result.restaurants[0].id, Restaurants.fromJson(meltingPot).id);
     });
 
     test('restaurant search result must not be null after parsing', () async {
@@ -31,7 +40,7 @@ void main() {
 
       // assert
       expect(result.error, false);
-      expect(result.restaurants[0].name, 'Melting Pot');
+      expect(result.restaurants[0].name, Restaurants.fromJson(meltingPot).name);
     });
 
     test('restaurant detail must not be null after parsing', () async {
@@ -40,7 +49,7 @@ void main() {
 
       // assert
       expect(result.error, false);
-      expect(result.restaurant.id, id);
+      expect(result.restaurant.id, Restaurants.fromJson(meltingPot).id);
     });
 
     test('should succeed add comment to restaurant', () async {
