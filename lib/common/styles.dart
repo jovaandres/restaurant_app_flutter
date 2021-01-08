@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-final Color primaryColor = Color(0xFFFFFFFF);
+final Color primaryColor = Colors.lightBlue;
 final Color secondaryColor = Colors.lightBlueAccent;
 final Color darkPrimaryColor = Color(0xFF000000);
 final Color darkSecondaryColor = Color(0xff64ffda);
@@ -9,7 +9,6 @@ ThemeData lightTheme = ThemeData(
     primaryColor: primaryColor,
     primaryColorDark: Colors.grey[350],
     accentColor: secondaryColor,
-    scaffoldBackgroundColor: Colors.white,
     visualDensity: VisualDensity.adaptivePlatformDensity,
     iconTheme: IconThemeData(color: Colors.green),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(

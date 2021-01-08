@@ -22,8 +22,7 @@ Widget buildRestaurantItem(BuildContext context, Restaurants restaurant) {
             color: Theme.of(context).colorScheme.shadowColor,
           )
         ],
-        gradient: Theme.of(context).colorScheme.cardColor,
-        color: Colors.grey.withOpacity(1),
+        color: Theme.of(context).colorScheme.cardColor,
         borderRadius: BorderRadius.all(Radius.circular(0)),
       ),
       margin: const EdgeInsets.all(4.0),
@@ -100,14 +99,109 @@ Widget buildRestaurantItem(BuildContext context, Restaurants restaurant) {
                     direction: Axis.horizontal,
                     itemCount: 5,
                     itemBuilder: (context, index) => Icon(
-                      CupertinoIcons.star_fill,
-                      color: Colors.yellow,
-                    ),
+                        CupertinoIcons.star_fill,
+                        color: Theme.of(context).colorScheme.ratingColor),
                     itemSize: 16,
                   )
                 ],
               ),
             ),
+          )
+        ],
+      ),
+    ),
+  );
+}
+
+Widget buildFavoriteItem(BuildContext context, Restaurants restaurant) {
+  return GestureDetector(
+    onTap: () {
+      Navigation.intentRoute(_createRouteToDetail(restaurant.id));
+    },
+    child: Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+            offset: Offset(-15, -15),
+            blurRadius: 22,
+            color: Theme.of(context).colorScheme.shadowColor,
+          )
+        ],
+        color: Theme.of(context).colorScheme.cardColor,
+        borderRadius: BorderRadius.all(Radius.circular(0)),
+      ),
+      margin: const EdgeInsets.all(4.0),
+      child: Column(
+        children: [
+          Text(
+            restaurant.name,
+            textAlign: TextAlign.start,
+            style: textStyle.copyWith(fontSize: 18),
+          ),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                CupertinoIcons.location_solid,
+                size: 20,
+              ),
+              Text(
+                restaurant.city,
+                style: textStyle,
+                textAlign: TextAlign.start,
+              )
+            ],
+          ),
+          SizedBox(height: 8),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(8.0),
+            child: Hero(
+              tag: restaurant.id,
+              child: Image.network(
+                smallImage + restaurant.pictureId,
+                height: 175,
+                loadingBuilder: (BuildContext context, Widget child,
+                    ImageChunkEvent loading) {
+                  if (loading == null) return child;
+                  return Center(
+                    heightFactor: 2,
+                    child: CircularProgressIndicator(
+                      value: loading.expectedTotalBytes != null
+                          ? loading.cumulativeBytesLoaded /
+                              loading.expectedTotalBytes
+                          : null,
+                    ),
+                  );
+                },
+                errorBuilder: (BuildContext context, Object exception,
+                    StackTrace stackTrace) {
+                  return Center(
+                    child: Image.asset(
+                      'assets/image_error.png',
+                      width: 60,
+                      height: 60,
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+          RatingBarIndicator(
+            rating: restaurant.rating.toDouble(),
+            direction: Axis.horizontal,
+            itemCount: 5,
+            itemBuilder: (context, index) => Icon(CupertinoIcons.star_fill,
+                color: Theme.of(context).colorScheme.ratingColor),
+            itemSize: 16,
+          ),
+          SizedBox(height: 8),
+          Text(
+            restaurant.description,
+            textAlign: TextAlign.justify,
+            style: textStyle,
+            maxLines: 3,
+            overflow: TextOverflow.ellipsis,
           )
         ],
       ),

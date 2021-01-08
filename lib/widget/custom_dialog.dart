@@ -15,7 +15,7 @@ customDialog(BuildContext context, String title, String content) {
           content: Text(content),
           actions: [
             CupertinoDialogAction(
-              child: Text('Ok'),
+              child: Text('OK'),
               onPressed: () {
                 Navigation.back();
               },
@@ -30,10 +30,13 @@ customDialog(BuildContext context, String title, String content) {
       builder: (context) {
         return AlertDialog(
           title: Text(title),
-          content: Text(content),
+          content: Text(
+            content,
+            textAlign: TextAlign.justify,
+          ),
           actions: [
             FlatButton(
-              child: Text('Ok'),
+              child: Text('OK'),
               onPressed: () {
                 Navigation.back();
               },

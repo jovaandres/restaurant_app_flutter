@@ -8,6 +8,7 @@ class PreferencesHelper {
 
   static const DARK_THEME = 'DARK_THEME';
   static const DAILY_REMINDER = 'DAILY_REMINDER';
+  static const READ_NOTICE = 'READ_NOTICE';
 
   Future<bool> get isDarkTheme async {
     final prefs = await sharedPreferences;
@@ -27,5 +28,15 @@ class PreferencesHelper {
   void setDailyNews(bool value) async {
     final prefs = await sharedPreferences;
     prefs.setBool(DAILY_REMINDER, value);
+  }
+
+  Future<bool> get isNoticeRead async {
+    final prefs = await sharedPreferences;
+    return prefs.getBool(READ_NOTICE) ?? false;
+  }
+
+  void readNotice() async {
+    final prefs = await sharedPreferences;
+    prefs.setBool(READ_NOTICE, true);
   }
 }

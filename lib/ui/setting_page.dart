@@ -39,7 +39,14 @@ class _SettingPageState extends State<SettingPage> {
                 ),
                 trailing: Switch.adaptive(
                   value: provider.isDarkTheme,
-                  onChanged: (value) => provider.enableDarkTheme(value),
+                  onChanged: (value) {
+                    if (!provider.isNoticeRead) {
+                      customDialog(context, 'Beta Version',
+                          'The light theme is now on beta version.\nHelp us to improve it');
+                      provider.readNotice();
+                    }
+                    provider.enableDarkTheme(value);
+                  },
                 ),
               ),
             ),

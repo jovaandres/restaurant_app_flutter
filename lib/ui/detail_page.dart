@@ -14,6 +14,7 @@ import 'package:restaurant_app_flutter/provider/detail_provider.dart';
 import 'package:restaurant_app_flutter/utils/result_state.dart';
 import 'package:restaurant_app_flutter/widget/empty_list.dart';
 import 'package:restaurant_app_flutter/widget/no_connection_widget.dart';
+import 'package:restaurant_app_flutter/common/custom_color_scheme.dart';
 
 class RestaurantDetail extends StatefulWidget {
   static const routeName = '/restaurant_detail';
@@ -195,7 +196,9 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
                                 child: Container(
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(8),
-                                      color: Colors.lightBlue),
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .categoryCardColor),
                                   child: Padding(
                                     padding: const EdgeInsets.all(6),
                                     child: Text(
@@ -229,7 +232,9 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
                                       alignment: Alignment.bottomRight,
                                       image: AssetImage('assets/foods.png'),
                                     ),
-                                    color: Colors.orange.withOpacity(0.2),
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .getMenusColor[0],
                                     borderRadius: BorderRadius.all(
                                       Radius.circular(8),
                                     ),
@@ -264,7 +269,9 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
                                       alignment: Alignment.bottomRight,
                                       image: AssetImage('assets/drinks.png'),
                                     ),
-                                    color: Colors.greenAccent.withOpacity(0.2),
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .getMenusColor[1],
                                     borderRadius: BorderRadius.all(
                                       Radius.circular(8),
                                     ),

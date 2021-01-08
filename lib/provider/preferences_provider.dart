@@ -7,6 +7,7 @@ class PreferencesProvider extends ChangeNotifier {
   PreferencesProvider({@required this.preferencesHelper}) {
     _getDailyNewsPreferences();
     _getThemePreferences();
+    _getNoticePreferences();
   }
 
   bool _isDailyReminderActive = false;
@@ -14,6 +15,9 @@ class PreferencesProvider extends ChangeNotifier {
 
   bool _isDarkTheme = true;
   bool get isDarkTheme => _isDarkTheme;
+
+  bool _isNoticeRead = false;
+  bool get isNoticeRead => _isNoticeRead;
 
   void _getDailyNewsPreferences() async {
     _isDailyReminderActive = await preferencesHelper.isDailyReminderActive;
@@ -33,5 +37,15 @@ class PreferencesProvider extends ChangeNotifier {
   void enableDarkTheme(bool value) {
     preferencesHelper.setDarkTheme(value);
     _getThemePreferences();
+  }
+
+  void _getNoticePreferences() async {
+    _isNoticeRead = await preferencesHelper.isNoticeRead;
+    notifyListeners();
+  }
+
+  void readNotice() {
+    preferencesHelper.readNotice();
+    _getNoticePreferences();
   }
 }

@@ -41,8 +41,8 @@ class FavoritePage extends StatelessWidget {
                           child: FadeInAnimation(
                             child: Dismissible(
                               key: Key(favorites[index].id),
-                              child: buildRestaurantItem(
-                                  context, favorites[index]),
+                              child:
+                                  buildFavoriteItem(context, favorites[index]),
                               direction: DismissDirection.endToStart,
                               onDismissed: (direction) {
                                 state.removeFavorite(favorites[index].id);
