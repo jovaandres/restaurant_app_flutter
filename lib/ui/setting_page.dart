@@ -65,7 +65,7 @@ class _SettingPageState extends State<SettingPage> {
                       onChanged: (value) {
                         if (Platform.isIOS) {
                           customDialog(context, 'Coming Soon',
-                              'This feature will coming soon!');
+                              'This feature will be coming soon!');
                         } else {
                           scheduled.scheduleNotification(value);
                           provider.enableDailyReminder(value);

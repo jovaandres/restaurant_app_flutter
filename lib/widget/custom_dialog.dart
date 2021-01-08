@@ -32,7 +32,7 @@ customDialog(BuildContext context, String title, String content) {
           title: Text(title),
           content: Text(
             content,
-            textAlign: TextAlign.justify,
+            textAlign: TextAlign.center,
           ),
           actions: [
             FlatButton(

@@ -19,6 +19,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _bottomNavIndex = 0;
+  PageController _pageController;
 
   final NotificationHelper _notificationHelper = NotificationHelper();
   final BackgroundService _service = BackgroundService();
@@ -39,19 +40,24 @@ class _HomePageState extends State<HomePage> {
         label: SettingPage.title)
   ];
 
-  void _onBotomNavTapped(int index) {
-    setState(() {
-      _bottomNavIndex = index;
-    });
-  }
-
   Widget _buildAndroid(BuildContext context) {
     return Scaffold(
-      body: _listWidget[_bottomNavIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _bottomNavIndex,
+        onTap: (index) {
+          _pageController.animateToPage(index,
+              duration: Duration(milliseconds: 500), curve: Curves.easeInOut);
+        },
         items: _bottomBarItem,
-        onTap: _onBotomNavTapped,
+      ),
+      body: PageView(
+        controller: _pageController,
+        onPageChanged: (newIndex) {
+          setState(() {
+            this._bottomNavIndex = newIndex;
+          });
+        },
+        children: _listWidget,
       ),
     );
   }
@@ -71,6 +77,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     port.listen((_) async => await _service.someTask());
+    _pageController = PageController(initialPage: _bottomNavIndex);
     _notificationHelper
         .configureSelectNotificationSubject(RestaurantDetail.routeName);
   }
