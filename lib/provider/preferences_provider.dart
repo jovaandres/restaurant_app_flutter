@@ -11,12 +11,15 @@ class PreferencesProvider extends ChangeNotifier {
   }
 
   bool _isDailyReminderActive = false;
+
   bool get isDailyReminderActive => _isDailyReminderActive;
 
   bool _isDarkTheme = true;
+
   bool get isDarkTheme => _isDarkTheme;
 
   bool _isNoticeRead = false;
+
   bool get isNoticeRead => _isNoticeRead;
 
   void _getDailyNewsPreferences() async {

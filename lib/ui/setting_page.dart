@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:restaurant_app_flutter/common/constant.dart';
+import 'package:restaurant_app_flutter/common/styles.dart';
 import 'package:restaurant_app_flutter/provider/preferences_provider.dart';
 import 'package:restaurant_app_flutter/provider/scheduling_provider.dart';
 import 'package:restaurant_app_flutter/widget/custom_android_app_bar.dart';

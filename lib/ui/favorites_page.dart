@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:provider/provider.dart';
-import 'package:restaurant_app_flutter/common/constant.dart';
+import 'package:restaurant_app_flutter/common/styles.dart';
 import 'package:restaurant_app_flutter/provider/database_provider.dart';
 import 'package:restaurant_app_flutter/utils/result_state.dart';
 import 'package:restaurant_app_flutter/widget/build_restaurant_item.dart';

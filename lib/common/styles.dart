@@ -4,6 +4,7 @@ final Color primaryColor = Colors.lightBlue;
 final Color secondaryColor = Colors.lightBlueAccent;
 final Color darkPrimaryColor = Color(0xFF000000);
 final Color darkSecondaryColor = Color(0xff64ffda);
+final TextStyle textStyle = TextStyle(fontFamily: 'Montserrat');
 
 ThemeData lightTheme = ThemeData(
     primaryColor: primaryColor,

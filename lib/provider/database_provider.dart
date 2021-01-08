@@ -11,12 +11,15 @@ class DatabaseProvider extends ChangeNotifier {
   }
 
   ResultState _state;
+
   ResultState get state => _state;
 
   String _message;
+
   String get message => _message;
 
   List<Restaurants> _favorites = [];
+
   List<Restaurants> get favorites => _favorites;
 
   void _getFavorites() async {

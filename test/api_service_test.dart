@@ -4,7 +4,7 @@ import 'package:restaurant_app_flutter/data/model/restaurant.dart';
 import 'package:restaurant_app_flutter/data/model/restaurant_detail.dart';
 
 void main() {
-  group('ApiService Test - Parsing Json', () {
+  group('ApiService Test - Parsing Json =>', () {
     // arrange
     ApiService apiService;
     final restaurantName = 'melt';

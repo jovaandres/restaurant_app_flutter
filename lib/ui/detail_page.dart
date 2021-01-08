@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:restaurant_app_flutter/common/constant.dart';
+import 'package:restaurant_app_flutter/common/styles.dart';
 import 'package:restaurant_app_flutter/common/navigation.dart';
 import 'package:restaurant_app_flutter/data/api/api_service.dart';
 import 'package:restaurant_app_flutter/data/model/restaurant.dart';

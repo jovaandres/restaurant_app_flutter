@@ -66,7 +66,8 @@ class Category {
 
   String name;
 
-  factory Category.fromJson(Map<String, dynamic> json) => Category(
+  factory Category.fromJson(Map<String, dynamic> json) =>
+      Category(
         name: json["name"],
       );
 }
@@ -82,7 +83,8 @@ class CustomerReview {
   String review;
   String date;
 
-  factory CustomerReview.fromJson(Map<String, dynamic> json) => CustomerReview(
+  factory CustomerReview.fromJson(Map<String, dynamic> json) =>
+      CustomerReview(
         name: json["name"],
         review: json["review"],
         date: json["date"],
@@ -98,9 +100,10 @@ class Menus {
   List<Category> foods;
   List<Category> drinks;
 
-  factory Menus.fromJson(Map<String, dynamic> json) => Menus(
+  factory Menus.fromJson(Map<String, dynamic> json) =>
+      Menus(
         foods:
-            List<Category>.from(json["foods"].map((x) => Category.fromJson(x))),
+        List<Category>.from(json["foods"].map((x) => Category.fromJson(x))),
         drinks: List<Category>.from(
             json["drinks"].map((x) => Category.fromJson(x))),
       );
