@@ -74,6 +74,7 @@ class RestaurantListPage extends StatelessWidget {
               style: textStyle.copyWith(fontSize: 22),
             ),
             IconButton(
+              key: Key('search'),
               icon: Icon(CupertinoIcons.search),
               onPressed: () {
                 Navigation.intentRoute(_createRouteToSearch());

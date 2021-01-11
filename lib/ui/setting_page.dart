@@ -19,8 +19,6 @@ class SettingPage extends StatefulWidget {
 }
 
 class _SettingPageState extends State<SettingPage> {
-  bool boolean = false;
-
   Widget _buildList() {
     return Consumer<PreferencesProvider>(
       builder: (context, provider, _) {

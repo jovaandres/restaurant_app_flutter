@@ -10,6 +10,7 @@ import 'package:restaurant_app_flutter/common/custom_color_scheme.dart';
 
 Widget buildRestaurantItem(BuildContext context, Restaurants restaurant) {
   return GestureDetector(
+    key: Key(restaurant.name),
     onTap: () {
       Navigation.intentRoute(_createRouteToDetail(restaurant.id));
     },

@@ -28,8 +28,8 @@ class RestaurantDetail extends StatefulWidget {
 }
 
 class _RestaurantDetailState extends State<RestaurantDetail> {
-  final myController1 = TextEditingController();
-  final myController2 = TextEditingController();
+  final _nameFieldController = TextEditingController();
+  final _reviewFieldController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -41,8 +41,8 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
 
   @override
   void dispose() {
-    myController1.dispose();
-    myController2.dispose();
+    _nameFieldController.dispose();
+    _reviewFieldController.dispose();
     super.dispose();
   }
 
@@ -103,6 +103,7 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           IconButton(
+                            key: Key('back'),
                             icon: Icon(
                               CupertinoIcons.arrow_left,
                               size: 26,
@@ -118,6 +119,7 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
                                 builder: (context, snapshot) {
                                   var isFavorite = snapshot.data ?? false;
                                   return IconButton(
+                                    key: Key('add to favorite'),
                                     icon: Icon(
                                       isFavorite
                                           ? CupertinoIcons.heart_fill
@@ -382,7 +384,7 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
                                                     children: [
                                                       TextField(
                                                         controller:
-                                                            myController1,
+                                                            _nameFieldController,
                                                         decoration:
                                                             InputDecoration(
                                                           hintText: 'Nama Kamu',
@@ -398,7 +400,7 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
                                                             return null;
                                                           },
                                                           controller:
-                                                              myController2,
+                                                              _reviewFieldController,
                                                           decoration:
                                                               InputDecoration(
                                                             hintText:
@@ -426,13 +428,10 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
                                                               .validate()) {
                                                             ApiService().addReview(
                                                                 state.result.id,
-                                                                myController1
-                                                                        .text
-                                                                        .isNotEmpty
-                                                                    ? myController1
-                                                                        .text
-                                                                    : 'Anonim',
-                                                                myController2
+                                                                _nameFieldController
+                                                                        .text ??
+                                                                    'Anonim',
+                                                                _reviewFieldController
                                                                     .text);
                                                             Navigation.back();
                                                           }
@@ -465,7 +464,7 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
                                                     children: [
                                                       CupertinoTextField(
                                                         controller:
-                                                            myController1,
+                                                            _nameFieldController,
                                                         placeholder:
                                                             'Nama Kamu',
                                                         style: TextStyle(
@@ -475,7 +474,7 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
                                                       SizedBox(height: 8),
                                                       CupertinoTextField(
                                                         controller:
-                                                            myController2,
+                                                            _reviewFieldController,
                                                         placeholder:
                                                             'Tulis Review',
                                                         style: TextStyle(
@@ -491,12 +490,11 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
                                                       onPressed: () {
                                                         ApiService().addReview(
                                                             state.result.id,
-                                                            myController1.text
-                                                                    .isNotEmpty
-                                                                ? myController1
-                                                                    .text
-                                                                : 'Anonim',
-                                                            myController2.text);
+                                                            _nameFieldController
+                                                                    .text ??
+                                                                'Anonim',
+                                                            _reviewFieldController
+                                                                .text);
                                                         Navigation.back();
                                                       })
                                                 ],

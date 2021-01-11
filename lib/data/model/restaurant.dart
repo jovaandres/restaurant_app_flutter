@@ -21,7 +21,7 @@ class Restaurant {
 
   factory Restaurant.fromJsonSearch(Map<String, dynamic> json) => Restaurant(
         error: json["error"],
-        message: "Seacrh",
+        message: "Search",
         count: json["founded"],
         restaurants: List<Restaurants>.from(
             json["restaurants"].map((x) => Restaurants.fromJson(x))),

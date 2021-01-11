@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
-final Color primaryColor = Colors.lightBlue;
-final Color secondaryColor = Colors.lightBlueAccent;
-final Color darkPrimaryColor = Color(0xFF000000);
-final Color darkSecondaryColor = Color(0xff64ffda);
+final Color _primaryColor = Colors.lightBlue;
+final Color _secondaryColor = Colors.lightBlueAccent;
+final Color _darkPrimaryColor = Color(0xFF000000);
+final Color _darkSecondaryColor = Color(0xff64ffda);
 final TextStyle textStyle = TextStyle(fontFamily: 'Montserrat');
 
 ThemeData lightTheme = ThemeData(
-    primaryColor: primaryColor,
+    primaryColor: _primaryColor,
     primaryColorDark: Colors.grey[350],
-    accentColor: secondaryColor,
+    accentColor: _secondaryColor,
     visualDensity: VisualDensity.adaptivePlatformDensity,
     iconTheme: IconThemeData(color: Colors.green),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
@@ -18,9 +18,9 @@ ThemeData lightTheme = ThemeData(
         unselectedItemColor: Colors.blueGrey[700]));
 
 ThemeData darkTheme = ThemeData.dark().copyWith(
-    primaryColor: darkPrimaryColor,
+    primaryColor: _darkPrimaryColor,
     primaryColorDark: Colors.grey[900],
-    accentColor: darkSecondaryColor,
+    accentColor: _darkSecondaryColor,
     visualDensity: VisualDensity.adaptivePlatformDensity,
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
         backgroundColor: Colors.black26,

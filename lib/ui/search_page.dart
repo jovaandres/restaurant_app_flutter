@@ -10,7 +10,7 @@ import 'package:restaurant_app_flutter/widget/no_connection_widget.dart';
 import 'package:restaurant_app_flutter/widget/platform_widget.dart';
 import 'package:rxdart/rxdart.dart';
 
-var textQuery = BehaviorSubject<String>();
+var _textQuery = BehaviorSubject<String>();
 
 class SearchPage extends StatefulWidget {
   static const routeName = '/search_page';
@@ -20,33 +20,33 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-  TextEditingController myController;
+  TextEditingController _searchQueryController;
   static const title = 'Search Restaurants';
   String _oldString = '';
 
   @override
   void initState() {
-    myController = TextEditingController();
-    myController.addListener(updateList);
+    _searchQueryController = TextEditingController();
+    _searchQueryController.addListener(updateList);
     super.initState();
   }
 
   @override
   void dispose() {
-    myController.removeListener(updateList);
-    myController.dispose();
+    _searchQueryController.removeListener(updateList);
+    _searchQueryController.dispose();
     super.dispose();
   }
 
   updateList() {
-    textQuery.add(myController.text);
-    textQuery
+    _textQuery.add(_searchQueryController.text);
+    _textQuery
         .where((value) => value.isNotEmpty && value != _oldString)
         .debounceTime(Duration(milliseconds: 500))
         .listen((query) {
       Provider.of<SearchProvider>(context, listen: false)
           .fetchSearchedRestaurant(query);
-      _oldString = myController.text;
+      _oldString = _searchQueryController.text;
     });
   }
 
@@ -64,8 +64,10 @@ class _SearchPageState extends State<SearchPage> {
         Padding(
           padding: const EdgeInsets.all(8),
           child: TextField(
+              key: Key('texy field'),
               style: textStyle,
               keyboardType: TextInputType.name,
+              autofocus: true,
               decoration: InputDecoration(
                 labelText: 'Search Restaurant',
                 hintText: 'Search by name or menu',
@@ -120,7 +122,7 @@ class _SearchPageState extends State<SearchPage> {
   Widget _buildAndroid(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: _buildList(myController),
+        child: _buildList(_searchQueryController),
       ),
     );
   }
@@ -131,7 +133,7 @@ class _SearchPageState extends State<SearchPage> {
         middle: Text(title),
       ),
       child: SafeArea(
-        child: _buildList(myController),
+        child: _buildList(_searchQueryController),
       ),
     );
   }
