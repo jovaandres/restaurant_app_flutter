@@ -429,8 +429,11 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
                                                             ApiService().addReview(
                                                                 state.result.id,
                                                                 _nameFieldController
-                                                                        .text ??
-                                                                    'Anonim',
+                                                                        .text
+                                                                        .isNotEmpty
+                                                                    ? _nameFieldController
+                                                                        .text
+                                                                    : 'Anonim',
                                                                 _reviewFieldController
                                                                     .text);
                                                             Navigation.back();
@@ -491,8 +494,11 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
                                                         ApiService().addReview(
                                                             state.result.id,
                                                             _nameFieldController
-                                                                    .text ??
-                                                                'Anonim',
+                                                                    .text
+                                                                    .isNotEmpty
+                                                                ? _nameFieldController
+                                                                    .text
+                                                                : 'Anonim',
                                                             _reviewFieldController
                                                                 .text);
                                                         Navigation.back();
