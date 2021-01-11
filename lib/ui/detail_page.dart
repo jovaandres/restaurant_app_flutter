@@ -5,8 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:restaurant_app_flutter/common/constant.dart';
-import 'package:restaurant_app_flutter/common/styles.dart';
+import 'package:restaurant_app_flutter/common/custom_color_scheme.dart';
 import 'package:restaurant_app_flutter/common/navigation.dart';
+import 'package:restaurant_app_flutter/common/styles.dart';
 import 'package:restaurant_app_flutter/data/api/api_service.dart';
 import 'package:restaurant_app_flutter/data/model/restaurant.dart';
 import 'package:restaurant_app_flutter/data/model/restaurant_detail.dart';
@@ -15,7 +16,6 @@ import 'package:restaurant_app_flutter/provider/detail_provider.dart';
 import 'package:restaurant_app_flutter/utils/result_state.dart';
 import 'package:restaurant_app_flutter/widget/empty_list.dart';
 import 'package:restaurant_app_flutter/widget/no_connection_widget.dart';
-import 'package:restaurant_app_flutter/common/custom_color_scheme.dart';
 
 class RestaurantDetail extends StatefulWidget {
   static const routeName = '/restaurant_detail';
@@ -540,13 +540,12 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
               ),
             );
           } else if (state.state == ResultState.NoData) {
-            return EmptyWidget(message: 'Data not displayed successfully');
-          } else if (state.state == ResultState.Error) {
-            return NoConnectionWidget();
-          } else {
             return Center(
-              child: Text(''),
-            );
+                child: EmptyWidget(message: 'Data not displayed successfully'));
+          } else if (state.state == ResultState.Error) {
+            return Center(child: NoConnectionWidget());
+          } else {
+            return Center(child: Text(''));
           }
         }),
       ),

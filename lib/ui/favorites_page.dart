@@ -93,13 +93,12 @@ class FavoritePage extends StatelessWidget {
                   ),
                 );
               } else if (state.state == ResultState.NoData) {
-                return EmptyWidget(
-                  message: 'There is no favorite restaurant yet',
-                );
-              } else {
                 return Center(
-                  child: Text(''),
-                );
+                    child: EmptyWidget(
+                  message: 'There is no favorite restaurant yet',
+                ));
+              } else {
+                return Center(child: Text(''));
               }
             },
           ),

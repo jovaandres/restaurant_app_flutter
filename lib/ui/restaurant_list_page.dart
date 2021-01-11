@@ -48,13 +48,13 @@ class RestaurantListPage extends StatelessWidget {
                       }),
                 );
               } else if (state.state == ResultState.NoData) {
-                return EmptyWidget(message: 'Data not displayed successfully');
-              } else if (state.state == ResultState.Error) {
-                return NoConnectionWidget();
-              } else {
                 return Center(
-                  child: Text(''),
-                );
+                    child: EmptyWidget(
+                        message: 'Data not displayed successfully'));
+              } else if (state.state == ResultState.Error) {
+                return Center(child: NoConnectionWidget());
+              } else {
+                return Center(child: Text(''));
               }
             },
           ),

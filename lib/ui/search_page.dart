@@ -103,9 +103,10 @@ class _SearchPageState extends State<SearchPage> {
                             context, state.result.restaurants[index]);
                       });
                 } else if (state.state == ResultState.NoData) {
-                  return EmptyWidget(message: 'Try another keyword');
+                  return Center(
+                      child: EmptyWidget(message: 'Try another keyword'));
                 } else if (state.state == ResultState.Error) {
-                  return NoConnectionWidget();
+                  return Center(child: NoConnectionWidget());
                 } else {
                   return Center(
                     child: Text(''),
